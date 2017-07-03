@@ -1,0 +1,16 @@
+{
+  "name": "trivial-redux",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "coffee -o lib/ -c src/",
+    "pub": "npm run build && npm publish"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "coffee-script": "^1.12.6"
+  }
+}
