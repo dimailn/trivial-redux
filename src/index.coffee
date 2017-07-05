@@ -27,6 +27,7 @@ trivialRedux = (endpoints, settings) ->
         reducers[type]
         endpoint.initialState || reducers[type].defaultState
         endpoint.reducer
+        api.actions[name]
       )
 
       plugins.each (plugin) -> plugin(name, endpoint, api)
