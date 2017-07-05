@@ -1,6 +1,6 @@
 actions  = require './actions'
 reducers = require './reducers'
-
+plugins  = require './plugins'
 DEFAULT_ENDPOINT_TYPE = 'rest'
 
 trivialRedux = (endpoints, settings) ->
