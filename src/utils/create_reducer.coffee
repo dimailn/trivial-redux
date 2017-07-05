@@ -1,6 +1,6 @@
-module.exports = (entity_name, initialState, customReducer = null) ->
-  crudReducer = createRestReducerFor(entity_name, initialState)
+module.exports = (entity_name, reducerFactory, initialState, customReducer = null) ->
+  reducer = reducerFactory(entity_name, initialState)
   # Если не задан кастомный редьюсер - возвращаем стандартный
-  return crudReducer unless customReducer?
+  return reducer unless customReducer?
   # Иначе возвращаем обертку над кастомным редьюсером, передавая в него стандартный редьюсер
-  (state = initialState, action) -> customReducer(state, action, crudReducer, initialState)
+  (state = initialState, action) -> customReducer(state, action, reducer, initialState)

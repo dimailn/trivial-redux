@@ -1,6 +1,8 @@
-actions  = require './actions'
-reducers = require './reducers'
-plugins  = require './plugins'
+actions       = require './actions'
+reducers      = require './reducers'
+plugins       = require './plugins'
+createReducer = require './utils/createReducer'
+
 DEFAULT_ENDPOINT_TYPE = 'rest'
 
 trivialRedux = (endpoints, settings) ->
@@ -20,8 +22,9 @@ trivialRedux = (endpoints, settings) ->
         Object.assign({}, endpoint, settings)
       )
 
-      api.reducers[name] = reducers[type](
+      api.reducers[name] = createReducer(
         name
+        reducers[type]
         endpoint.initialState || reducers[type].defaultState
         endpoint.reducer
       )
