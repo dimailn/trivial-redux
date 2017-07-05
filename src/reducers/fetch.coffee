@@ -18,9 +18,6 @@ createFetchReducerFor = (entity_name, initialState) ->
       else
         state
 
-module.exports.defaultState = defaultState
+createFetchReducerFor.defaultState = defaultState
 
-module.exports = (entity_name, initialState = defaultState, customerReducer = null) ->
-  fetchReducer = createFetchReducerFor(entity_name, initialState)
-  return fetchReducer unless customerReducer?
-  (state = initialState, action) -> customerReducer(state, action, fetchReducer, initialState)
+module.exports = createFetchReducerFor
