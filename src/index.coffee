@@ -1,7 +1,7 @@
 actions       = require './actions'
 reducers      = require './reducers'
 plugins       = require './plugins'
-createReducer = require './utils/createReducer'
+createReducer = require './utils/create_reducer'
 
 DEFAULT_ENDPOINT_TYPE = 'rest'
 
@@ -25,16 +25,16 @@ trivialRedux = (endpoints, settings) ->
       api.reducers[name] = createReducer(
         name
         reducers[type]
-        endpoint.initialState || reducers[type].defaultState
+        endpoint.initialState
         endpoint.reducer
         api.actions[name]
       )
 
-      plugins.each (plugin) -> plugin(name, endpoint, api)
+      plugins.forEach (plugin) -> plugin(name, endpoint, api)
 
     else
       api.actions[name]  = actions[DEFAULT_ENDPOINT_TYPE](name, endpoint)
-      api.reducers[name] = reducers[DEFAULT_ENDPOINT_TYPE](name)
+      api.reducers[name] = createReducer(name, reducers[DEFAULT_ENDPOINT_TYPE])
 
   api
 
