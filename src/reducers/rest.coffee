@@ -17,12 +17,26 @@ createRestReducerFor = (entity_name, initialState) ->
       when indexTypes.load
         Object.assign({}, state, fetching: true)
       when indexTypes.success
-        lastUpdatedAt: new Date().getTime(), data: Object.assign({}, state.data, collection: action.payload), fetching: false
+        lastUpdatedAt: new Date().getTime()
+        data: Object.assign({}, state.data, collection: action.payload)
+        fetching: false
+        error: null
       when indexTypes.failure
-        Object.assign({}, state, fetching: false)
+        Object.assign({}, state, fetching: false, error: action.response)
       # show
+      when showTypes.load
+        Object.assign({}, state, fetching: true)
       when showTypes.success
-        Object.assign({}, state, data: Object.assign({}, state.data, current: action.payload))
+        Object.assign(
+          {}
+          state
+          {
+            data: Object.assign({}, state.data, current: action.payload)
+            fetching: false
+          }
+        )
+      when showTypes.failure
+        Object.assign({}, state, fetching: false, error: action.response)
       else
         state
 
