@@ -1,14 +1,9 @@
-actions  = require './actions'
-reducers = require './reducers'
+actions       = require './actions'
+reducers      = require './reducers'
+plugins       = require './plugins'
+createReducer = require './utils/create_reducer'
 
 DEFAULT_ENDPOINT_TYPE = 'rest'
-
-applyExtra = (actions, extra) ->
-  actionsWithExtra = {}
-  for actionName, action of actions
-    do (action) ->
-      actionsWithExtra[actionName] =  (args...) -> Object.assign({}, action(args...), extra)
-  actionsWithExtra
 
 trivialRedux = (endpoints, settings) ->
   api =
@@ -23,15 +18,23 @@ trivialRedux = (endpoints, settings) ->
       api.actions[name]  = actions[type](
         name
         endpoint.entry
+        # Применяем глобальные настройки
         Object.assign({}, endpoint, settings)
       )
 
-      api.actions[name] = applyExtra(api.actions[name], endpoint.extra) if endpoint.extra
+      api.reducers[name] = createReducer(
+        name
+        reducers[type]
+        endpoint.initialState
+        endpoint.reducer
+        api.actions[name]
+      )
 
-      api.reducers[name] = reducers[type](name, endpoint.initialState, endpoint.reducer)
+      plugins.forEach (plugin) -> plugin(name, endpoint, api)
+
     else
       api.actions[name]  = actions[DEFAULT_ENDPOINT_TYPE](name, endpoint)
-      api.reducers[name] = reducers[DEFAULT_ENDPOINT_TYPE](name)
+      api.reducers[name] = createReducer(name, reducers[DEFAULT_ENDPOINT_TYPE])
 
   api
 

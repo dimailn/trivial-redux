@@ -17,20 +17,29 @@ createRestReducerFor = (entity_name, initialState) ->
       when indexTypes.load
         Object.assign({}, state, fetching: true)
       when indexTypes.success
-        lastUpdatedAt: new Date().getTime(), data: Object.assign({}, state.data, collection: action.payload), fetching: false
+        lastUpdatedAt: new Date().getTime()
+        data: Object.assign({}, state.data, collection: action.payload)
+        fetching: false
+        error: null
       when indexTypes.failure
-        Object.assign({}, state, fetching: false)
+        Object.assign({}, state, fetching: false, error: action.response)
       # show
+      when showTypes.load
+        Object.assign({}, state, fetching: true)
       when showTypes.success
-        Object.assign({}, state, data: Object.assign({}, state.data, current: action.payload))
+        Object.assign(
+          {}
+          state
+          {
+            data: Object.assign({}, state.data, current: action.payload)
+            fetching: false
+          }
+        )
+      when showTypes.failure
+        Object.assign({}, state, fetching: false, error: action.response)
       else
         state
 
-module.exports.defaultState = defaultState
+createRestReducerFor.defaultState = defaultState
 
-module.exports = (entity_name, initialState = defaultState, customReducer = null) ->
-  crudReducer = createRestReducerFor(entity_name, initialState)
-  # Если не задан кастомный редьюсер - возвращаем стандартный
-  return crudReducer unless customReducer?
-  # Иначе возвращаем обертку над кастомным редьюсером, передавая в него стандартный редьюсер
-  (state = initialState, action) -> customReducer(state, action, crudReducer, initialState)
+module.exports = createRestReducerFor

@@ -12,15 +12,12 @@ createFetchReducerFor = (entity_name, initialState) ->
       when indexTypes.load
         Object.assign({}, state, fetching: true)
       when indexTypes.success
-        lastUpdatedAt: new Date().getTime(), data: Object.assign({}, action.payload), fetching: false
+        lastUpdatedAt: new Date().getTime(), data: action.payload, fetching: false
       when indexTypes.failure
-        Object.assign({}, state, Object.assign({}, action.payload), fetching: false)
+        Object.assign({}, state, data: action.payload, fetching: false)
       else
         state
 
-module.exports.defaultState = defaultState
+createFetchReducerFor.defaultState = defaultState
 
-module.exports = (entity_name, initialState = defaultState, customerReducer = null) ->
-  fetchReducer = createFetchReducerFor(entity_name, initialState)
-  return fetchReducer unless customerReducer?
-  (state = initialState, action) -> customerReducer(state, action, fetchReducer, initialState)
+module.exports = createFetchReducerFor
