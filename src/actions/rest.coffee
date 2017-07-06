@@ -3,11 +3,12 @@ actionTypesFor = require '../action_types'
 module.exports = (entity_name, endpoint, settings) ->
   format = (url) -> if settings?.skipFormat then url else url + '.json'
 
-  index: ->
+  index: (params) ->
     types: actionTypesFor('index', entity_name)
     meta:
       fetch:
         url: format(endpoint)
+        params: params
   show: (id) ->
     types: actionTypesFor('show', entity_name)
     meta:
