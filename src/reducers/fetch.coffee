@@ -8,6 +8,7 @@ defaultState =
 
 createFetchReducerFor = (entity_name, initialState) ->
   indexTypes = actionTypesFor('fetch', entity_name)
+  RESET_ACTION = actionTypeFor('reset', entity_name)
   (state = initialState, action) ->
     switch action.type
       when indexTypes.load
@@ -16,7 +17,7 @@ createFetchReducerFor = (entity_name, initialState) ->
         lastUpdatedAt: new Date().getTime(), data: action.payload, fetching: false
       when indexTypes.failure
         Object.assign({}, state, data: action.payload, fetching: false)
-      when actionTypeFor('reset', entity_name)
+      when RESET_ACTION
         Object.assign({}, state, data: null, lastUpdatedAt: null)
       else
         state
