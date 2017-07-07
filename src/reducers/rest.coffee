@@ -1,4 +1,5 @@
 actionTypesFor = require '../action_types'
+actionTypeFor  = require '../action_type'
 
 defaultState =
   lastUpdatedAt: null
@@ -37,6 +38,8 @@ createRestReducerFor = (entity_name, initialState) ->
         )
       when showTypes.failure
         Object.assign({}, state, fetching: false, error: action.response)
+      when actionTypeFor('reset', entity_name)
+        Object.assign({}, state, lastUpdatedAt: null, data: Object.assign({}, state.data, collection: []))
       else
         state
 

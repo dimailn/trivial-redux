@@ -1,4 +1,5 @@
 actionTypesFor = require '../action_types'
+actionTypeFor  = require '../action_type'
 
 module.exports = (entity_name, endpoint, settings) ->
   fetch: (idOrData, data) ->
@@ -12,3 +13,6 @@ module.exports = (entity_name, endpoint, settings) ->
       fetch:
         url: (if id? then "#{endpoint}/#{id}" else endpoint) + if settings?.skipFormat then '' else '.json'
         params: data
+
+  reset: ->
+    type: actionTypeFor('reset', entity_name)
