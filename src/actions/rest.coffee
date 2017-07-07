@@ -1,4 +1,5 @@
 actionTypesFor = require '../action_types'
+actionTypeFor  = require '../action_type'
 
 module.exports = (entity_name, endpoint, settings) ->
   format = (url) -> if settings?.skipFormat then url else url + '.json'
@@ -34,3 +35,5 @@ module.exports = (entity_name, endpoint, settings) ->
       fetch:
         url: format("#{endpoint}/#{id}")
         method: "DELETE"
+  reset: ->
+    type: actionTypeFor('reset', entity_name)
