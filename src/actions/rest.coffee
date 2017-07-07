@@ -18,7 +18,7 @@ module.exports = (entity_name, endpoint, settings) ->
     types: actionTypesFor('create', entity_name)
     meta:
       fetch:
-        url: endpoint
+        url: format(endpoint)
         data: data
         method: 'POST'
   update: (id, data) ->
