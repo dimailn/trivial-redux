@@ -44,7 +44,7 @@ createRestReducerFor = (entity_name, initialState) ->
       when RESET_ACTION
         Object.assign({}, defaultState)
       when nextPageTypes.success
-        if action.meta.page > state.nextPage || !state.nextPage?
+        if action.meta.page == state.nextPage || !state.nextPage?
           Object.assign(
             {}
             state
