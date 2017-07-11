@@ -48,5 +48,6 @@ module.exports = (entity_name, endpoint, settings) ->
           fetch:
             url: format(endpoint)
             params: params
+          page: params.page
       )
 
