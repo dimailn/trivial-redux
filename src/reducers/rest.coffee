@@ -48,7 +48,7 @@ createRestReducerFor = (entity_name, initialState) ->
           Object.assign(
             {}
             state
-            nextPage: if state.nextPage then state.nextPage + 1 else 1
+            nextPage: if state.nextPage then state.nextPage + 1 else 2
             data: Object.assign({}, state.data, collection: state.data.collection.concat(action.payload))
           )
         else
