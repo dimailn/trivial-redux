@@ -10,8 +10,10 @@ defaultState =
   fetching: false
 
 createRestReducerFor = (entity_name, initialState) ->
-  indexTypes   = actionTypesFor('index', entity_name)
-  showTypes    = actionTypesFor('show', entity_name)
+  indexTypes    = actionTypesFor('index', entity_name)
+  showTypes     = actionTypesFor('show', entity_name)
+  nextPageTypes = actionTypesFor('nextPage', entity_name)
+
   RESET_ACTION = actionTypeFor('reset', entity_name)
   (state = initialState, action) ->
     switch action.type
@@ -41,6 +43,8 @@ createRestReducerFor = (entity_name, initialState) ->
         Object.assign({}, state, fetching: false, error: action.response)
       when RESET_ACTION
         Object.assign({}, state, lastUpdatedAt: null, data: Object.assign({}, state.data, collection: []))
+      when nextPageTypes.success
+        Object.assign({}, state, nextPage: if state.nextPage then state.nextPage + 1 else )
       else
         state
 

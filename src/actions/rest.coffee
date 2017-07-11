@@ -37,3 +37,16 @@ module.exports = (entity_name, endpoint, settings) ->
         method: "DELETE"
   reset: ->
     type: actionTypeFor('reset', entity_name)
+
+  nextPage: (params) ->
+    (dispatch, getState) ->
+      { nextPage } = getState()[entity_name]
+      params = Object.assign({}, params, page: nextPage || 1)
+      dispatch(
+        type: actionTypesFor('nextPage', entity_name)
+        meta:
+          fetch:
+            url: format(endpoint)
+            params: params
+      )
+
