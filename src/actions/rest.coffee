@@ -43,7 +43,7 @@ module.exports = (entity_name, endpoint, settings) ->
       { nextPage } = getState()[entity_name]
       params = Object.assign({}, params, page: nextPage || 1)
       dispatch(
-        type: actionTypesFor('nextPage', entity_name)
+        types: actionTypesFor('nextPage', entity_name)
         meta:
           fetch:
             url: format(endpoint)
