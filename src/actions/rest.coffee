@@ -41,7 +41,7 @@ module.exports = (entity_name, endpoint, settings) ->
   nextPage: (params) ->
     (dispatch, getState) ->
       { nextPage } = getState()[entity_name]
-      params = Object.assign({}, params, page: nextPage || 1)
+      params = Object.assign({}, page: nextPage || 1, params)
       dispatch(
         types: actionTypesFor('nextPage', entity_name)
         meta:
