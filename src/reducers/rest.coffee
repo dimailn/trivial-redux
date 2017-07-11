@@ -42,7 +42,7 @@ createRestReducerFor = (entity_name, initialState) ->
       when showTypes.failure
         Object.assign({}, state, fetching: false, error: action.response)
       when RESET_ACTION
-        Object.assign({}, state, lastUpdatedAt: null, data: Object.assign({}, state.data, collection: []))
+        Object.assign({}, defaultState)
       when nextPageTypes.success
         if action.meta.page > state.nextPage || !state.nextPage?
           Object.assign(
