@@ -9,11 +9,11 @@ defaultState =
     oldCurrent: null
   fetching: false
 
-handleNextPage = (state, action) ->
+handleNextPage = (state, action, types) ->
   switch action.type
-    when nextPageTypes.load
+    when types.load
       Object.assign({}, state, fetching: true)
-    when nextPageTypes.success
+    when types.success
       Object.assign(
         {}
         state
@@ -21,7 +21,7 @@ handleNextPage = (state, action) ->
         nextPage: if state.nextPage then state.nextPage + 1 else 2
         data: Object.assign({}, state.data, collection: state.data.collection.concat(action.payload))
       )
-    when nextPageTypes.failure
+    when types.failure
       Object.assign({}, state, fetching: false, error: action.response)
 
 createRestReducerFor = (entity_name, initialState) ->
@@ -62,7 +62,7 @@ createRestReducerFor = (entity_name, initialState) ->
       # nextPage
       when nextPageTypes.load, nextPageTypes.success, nextPageTypes.failure
         return state unless action.meta.page == state.nextPage || !state.nextPage?
-        handleNextPage(state, action)
+        handleNextPage(state, action, nextPageTypes)
       else
         state
 
