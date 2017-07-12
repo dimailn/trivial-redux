@@ -9,6 +9,21 @@ defaultState =
     oldCurrent: null
   fetching: false
 
+handleNextPage = (state, action) ->
+  switch action.type
+    when nextPageTypes.load
+      Object.assign({}, state, fetching: true)
+    when nextPageTypes.success
+      Object.assign(
+        {}
+        state
+        fetching: false
+        nextPage: if state.nextPage then state.nextPage + 1 else 2
+        data: Object.assign({}, state.data, collection: state.data.collection.concat(action.payload))
+      )
+    when nextPageTypes.failure
+      Object.assign({}, state, fetching: false, error: action.response)
+
 createRestReducerFor = (entity_name, initialState) ->
   indexTypes    = actionTypesFor('index', entity_name)
   showTypes     = actionTypesFor('show', entity_name)
@@ -41,18 +56,13 @@ createRestReducerFor = (entity_name, initialState) ->
         )
       when showTypes.failure
         Object.assign({}, state, fetching: false, error: action.response)
+      # reset
       when RESET_ACTION
         Object.assign({}, defaultState)
-      when nextPageTypes.success
-        if action.meta.page == state.nextPage || !state.nextPage?
-          Object.assign(
-            {}
-            state
-            nextPage: if state.nextPage then state.nextPage + 1 else 2
-            data: Object.assign({}, state.data, collection: state.data.collection.concat(action.payload))
-          )
-        else
-          state
+      # nextPage
+      when nextPageTypes.load, nextPageTypes.success, nextPageTypes.failure
+        return state unless action.meta.page == state.nextPage || !state.nextPage?
+        handleNextPage(state, action)
       else
         state
 
