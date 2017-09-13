@@ -27,6 +27,7 @@ handleNextPage = (state, action, types) ->
 createRestReducerFor = (entity_name, initialState) ->
   indexTypes    = actionTypesFor('index', entity_name)
   showTypes     = actionTypesFor('show', entity_name)
+  showTypes     = actionTypesFor('update', entity_name)
   nextPageTypes = actionTypesFor('nextPage', entity_name)
 
   RESET_ACTION = actionTypeFor('reset', entity_name)
@@ -63,6 +64,19 @@ createRestReducerFor = (entity_name, initialState) ->
       when nextPageTypes.load, nextPageTypes.success, nextPageTypes.failure
         return state unless action.meta.page == state.nextPage || !state.nextPage?
         handleNextPage(state, action, nextPageTypes)
+      when updateTypes.success
+        Object.assign(
+          {},
+          state,
+          {
+            data: {
+              collection: state.data.collection.map (entity) -> if entity.id == action.payload.id then action.payload else entity
+              oldCurrent: null
+              current: null
+            }
+            fetching: false
+          }
+        )
       else
         state
 
