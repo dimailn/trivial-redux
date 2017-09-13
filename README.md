@@ -88,8 +88,8 @@ trivialRedux(
 
 * lastUpdatedAt - the timestamp for last update
 * collection - the array of entities
-* current - the property for keep show action result
-* oldCurrent - the property for keep old current version for positive updates(not using now)
+* current - the property for keeping show action result
+* oldCurrent - the property for keeping old current version for optimistic updates(not using now)
 * fetching - the flag of fetching state
 
 ### Fetch
