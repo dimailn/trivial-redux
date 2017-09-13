@@ -47,7 +47,7 @@ All options for configuration object you may see below.
 # Reducers override
 You can define your own reducer in the configuration object. It will have access to the standard trivial-redux reducer through this.reducer and types through this.types.
 
-Note: *this* in reducer is the immutable context for more convenient pass of useful data from trivial-redux to your reducer.
+Note: *this* in reducer is immutable context for more convenient pass of useful data from trivial-redux to your reducer.
 You can't use it to save any your state.
 ```
 trivialRedux(
