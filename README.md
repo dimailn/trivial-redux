@@ -1,7 +1,7 @@
 # trivial-redux
 Trivial Redux is the library for fast creating API layer that gives you trivial CRUD from the box.
-It generates the actions and the reducers for standard REST queries. 
-The reducers are easy expandable through the creating your own reducer that has convenient interface for access to 
+It generates actions and reducers for standard REST queries. 
+The reducers are easy expandable through creating your own reducer that has convenient interface for access to 
 the generated reducer, action types and the default state.
 
 Trivial Redux was creating for generating only the part of the store structure(api entities, generally).
