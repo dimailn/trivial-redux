@@ -122,7 +122,7 @@ trivialRedux(
 * id - entity id for destroy
 
 #### nextPage(params)
-Loads next page of entity collection and append it to state(for huge collections, instead of index)
+Loads next page of entity collection and append it to state(for huge collections, instead of index). Redux-thunk required.
 
 * params - url params for filtering
 
