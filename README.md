@@ -60,7 +60,7 @@ trivialRedux(
           // and generate state by our result and the stanard reducer result
           return {...someResult, this.reducer(state, action) }
         case this.types.destroy:
-          // or we can don't use the standard reducer
+          // or we can not use the standard reducer
           // do something
           // return something
         case SOME_ACTION_TYPE:
