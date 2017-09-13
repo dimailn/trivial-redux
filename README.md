@@ -76,6 +76,7 @@ trivialRedux(
 
 ## The endpoint state structure
 ### REST
+```
 {
   lastUpdatedAt: null,
   data: {
@@ -85,6 +86,7 @@ trivialRedux(
   },
   fetching: false
 }
+```
 
 * lastUpdatedAt - the timestamp for last update
 * collection - the array of entities
@@ -93,11 +95,13 @@ trivialRedux(
 * fetching - the flag of fetching state
 
 ### Fetch
+```
 {
   lastUpdatedAt: null,
   data: null,
   fetching: false
 }
+```
 
 ## Actions description
 ### REST
