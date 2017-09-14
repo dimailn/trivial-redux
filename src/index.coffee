@@ -6,7 +6,7 @@ createActionTypes = require './utils/create_action_types'
 
 DEFAULT_ENDPOINT_TYPE = 'rest'
 
-trivialRedux = (endpoints, settings) ->
+trivialRedux = (endpoints, settings = {}) ->
   api =
     actions: {}
     reducers: {}
