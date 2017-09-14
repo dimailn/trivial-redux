@@ -134,10 +134,13 @@ Clears data.collection
 
 #### reset()
 
-## Configuration object properties
+## Configuration object
+You may pass the global configuration object as second argument of trivialRedux fabric. The endpoints's settings are override global.
+
+### Configuration object properties
 #### type
 The type of endpoint, rest or fetch.
-### skipFormat
+#### skipFormat
 The option for skip .json postfix that concatenates by default.
 #### reducer
 The custom reducer for your own logic
