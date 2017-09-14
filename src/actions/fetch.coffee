@@ -1,7 +1,10 @@
 actionTypesFor = require '../action_types'
 actionTypeFor  = require '../action_type'
+urlFormat      = require '../utils/url_format'
 
 module.exports = (entity_name, endpoint, settings) ->
+  format = urlFormat(settings)
+
   fetch: (idOrData, data) ->
     if idOrData instanceof Object
       data = idOrData
@@ -11,7 +14,7 @@ module.exports = (entity_name, endpoint, settings) ->
     types: actionTypesFor('fetch', entity_name)
     meta:
       fetch:
-        url: (if id? then "#{endpoint}/#{id}" else endpoint) + if settings?.skipFormat then '' else '.json'
+        url: format(if id? then "#{endpoint}/#{id}" else endpoint)
         params: data
 
   reset: ->
