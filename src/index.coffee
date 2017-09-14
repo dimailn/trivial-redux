@@ -14,14 +14,14 @@ trivialRedux = (endpoints, settings) ->
 
   for name, endpoint of endpoints
     if typeof endpoint is 'object'
-      type = endpoint.type || DEFAULT_ENDPOINT_TYPE
+      type = endpoint.type || settings.type || DEFAULT_ENDPOINT_TYPE
       throw "Неизвестный endpoint type \"#{type}\"" unless actions[type]? && reducers[type]?
 
       api.actions[name]  = actions[type](
         name
         endpoint.entry
         # Применяем глобальные настройки
-        Object.assign({}, endpoint, settings)
+        Object.assign({}, settings, endpoint)
       )
 
       api.reducers[name] = createReducer(
