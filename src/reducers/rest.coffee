@@ -1,13 +1,7 @@
 actionTypesFor = require '../action_types'
 actionTypeFor  = require '../action_type'
+defaultState   = require '../states/rest'
 
-defaultState =
-  lastUpdatedAt: null
-  data:
-    collection: []
-    current: null
-    oldCurrent: null
-  fetching: false
 
 handleNextPage = (state, action, types) ->
   switch action.type
@@ -59,7 +53,7 @@ createRestReducerFor = (entity_name, initialState) ->
         Object.assign({}, state, fetching: false, error: action.response)
       # reset
       when RESET_ACTION
-        Object.assign({}, defaultState)
+        Object.assign({}, initialState)
       # nextPage
       when nextPageTypes.load, nextPageTypes.success, nextPageTypes.failure
         return state unless action.meta.page == state.nextPage || !state.nextPage?
