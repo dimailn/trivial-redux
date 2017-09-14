@@ -133,3 +133,13 @@ Clears data.collection
 #### fetch(idOrParams, params)
 
 #### reset()
+
+## Configuration object properties
+#### type
+The type of endpoint, rest or fetch.
+### skipFormat
+The option for skip .json postfix that concatenates by default.
+#### reducer
+The custom reducer for your own logic
+#### host
+The host for url prefix
