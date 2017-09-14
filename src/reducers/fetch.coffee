@@ -1,10 +1,6 @@
 actionTypesFor = require '../action_types'
 actionTypeFor  = require '../action_type'
-
-defaultState =
-  lastUpdatedAt: null
-  data: null
-  fetching: false
+defaultState   = require '../states/fetch'
 
 createFetchReducerFor = (entity_name, initialState) ->
   indexTypes = actionTypesFor('fetch', entity_name)
@@ -18,7 +14,7 @@ createFetchReducerFor = (entity_name, initialState) ->
       when indexTypes.failure
         Object.assign({}, state, data: action.payload, fetching: false)
       when RESET_ACTION
-        Object.assign({}, state, data: null, lastUpdatedAt: null)
+        Object.assign({}, state, initialState)
       else
         state
 

@@ -46,3 +46,5 @@ trivialRedux = (endpoints, settings = {}) ->
 module.exports = trivialRedux
 
 module.exports.actionTypesFor = require './action_types'
+
+module.exports.defaultStates  = require './states'
