@@ -27,7 +27,7 @@ handleNextPage = (state, action, types) ->
 createRestReducerFor = (entity_name, initialState) ->
   indexTypes    = actionTypesFor('index', entity_name)
   showTypes     = actionTypesFor('show', entity_name)
-  showTypes     = actionTypesFor('update', entity_name)
+  updateTypes   = actionTypesFor('update', entity_name)
   nextPageTypes = actionTypesFor('nextPage', entity_name)
 
   RESET_ACTION = actionTypeFor('reset', entity_name)
