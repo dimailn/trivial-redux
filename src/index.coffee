@@ -6,6 +6,12 @@ createActionTypes = require './utils/create_action_types'
 
 DEFAULT_ENDPOINT_TYPE = 'rest'
 
+typeFrom = (endpoints, settings) ->
+  if typeof endpoint is 'object'
+    endpoint.type || settings.type || DEFAULT_ENDPOINT_TYPE
+  else
+    DEFAULT_ENDPOINT_TYPE
+
 trivialRedux = (endpoints, settings = {}) ->
   api =
     actions: {}
@@ -13,33 +19,36 @@ trivialRedux = (endpoints, settings = {}) ->
     types: {}
 
   for name, endpoint of endpoints
-    if typeof endpoint is 'object'
-      type = endpoint.type || settings.type || DEFAULT_ENDPOINT_TYPE
-      throw "Неизвестный endpoint type \"#{type}\"" unless actions[type]? && reducers[type]?
+    type = typeFrom(endpoint, settings)
+    throw "Неизвестный endpoint type \"#{type}\"" unless actions[type]? && reducers[type]?
+    Object.keys(api).forEach (componentName) -> apiComponents[componentName](name, endpoint, settings, api, type)
+    plugins.forEach (plugin) -> plugin(name, endpoint, api)
 
-      api.actions[name]  = actions[type](
-        name
-        endpoint.entry
-        # Применяем глобальные настройки
-        Object.assign({}, settings, endpoint)
-      )
+    # if typeof endpoint is 'object'
 
-      api.reducers[name] = createReducer(
-        name
-        reducers[type]
-        endpoint.initialState
-        endpoint.reducer
-        api.actions[name]
-      )
+    #   api.actions[name]  = actions[type](
+    #     name
+    #     endpoint.entry
+    #     # Применяем глобальные настройки
+    #     Object.assign({}, settings, endpoint)
+    #   )
 
-      api.types[name] = createActionTypes(name, api.actions[name])
+    #   api.reducers[name] = createReducer(
+    #     name
+    #     reducers[type]
+    #     endpoint.initialState
+    #     endpoint.reducer
+    #     api.actions[name]
+    #   )
 
-      plugins.forEach (plugin) -> plugin(name, endpoint, api)
+    #   api.types[name] = createActionTypes(name, api.actions[name])
 
-    else
-      api.actions[name]  = actions[DEFAULT_ENDPOINT_TYPE](name, endpoint)
-      api.reducers[name] = createReducer(name, reducers[DEFAULT_ENDPOINT_TYPE])
-      api.types[name] = createActionTypes(name, api.actions[name])
+
+    # else
+    #   api.actions[name]  = actions[DEFAULT_ENDPOINT_TYPE](name, endpoint)
+    #   api.reducers[name] = createReducer(name, reducers[DEFAULT_ENDPOINT_TYPE])
+
+    #   api.types[name]    = createActionTypes(name, api.actions[name])
 
   api
 

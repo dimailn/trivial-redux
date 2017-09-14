@@ -1,6 +1,6 @@
 createReducerContext = require './create_reducer_context'
 
-module.exports = (entityName, reducerFactory, initialState, customReducer = null, actions = null) ->
+module.exports = (entityName, reducerFactory, initialState, customReducer = null, actions = null, allTypes = null) ->
   reducer = reducerFactory(entityName, initialState || reducerFactory.defaultState)
   context = createReducerContext(entityName, actions, reducer) if actions
   # Если не задан кастомный редьюсер - возвращаем стандартный
