@@ -39,6 +39,7 @@ trivialRedux = (endpoints, settings) ->
     else
       api.actions[name]  = actions[DEFAULT_ENDPOINT_TYPE](name, endpoint)
       api.reducers[name] = createReducer(name, reducers[DEFAULT_ENDPOINT_TYPE])
+      api.types[name] = createActionTypes(name, api.actions[name])
 
   api
 
