@@ -1,8 +1,9 @@
 actionTypesFor = require '../action_types'
 actionTypeFor  = require '../action_type'
+urlFormat      = require '../utils/url_format'
 
 module.exports = (entity_name, endpoint, settings) ->
-  format = (url) -> if settings?.skipFormat then url else url + '.json'
+  format = urlFormat(settings)
 
   index: (params) ->
     types: actionTypesFor('index', entity_name)
