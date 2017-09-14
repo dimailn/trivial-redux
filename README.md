@@ -144,5 +144,7 @@ The type of endpoint, rest or fetch.
 The option for skip .json postfix that concatenates by default.
 #### reducer
 The custom reducer for your own logic
+#### initialState
+The initial state for the reducer
 #### host
 The host for url prefix
