@@ -36,7 +36,7 @@ All endpoints are considered as rest by default, but it can be changed:
 ```
 trivialRedux(
   todos: {
-    url: '...',
+    entry: '...',
     type: 'fetch'
   }
 )
@@ -52,7 +52,7 @@ You can't use it to save any your state.
 ```
 trivialRedux(
   todos: {
-    url: '...',
+    entry: '...',
     reducer: function(state, action){
       switch(action.type){
         case this.types.index.success:
