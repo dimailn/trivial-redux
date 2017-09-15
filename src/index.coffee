@@ -1,5 +1,4 @@
-actions           = require './actions'
-reducers          = require './reducers'
+components        = require './components'
 plugins           = require './plugins'
 createReducer     = require './utils/create_reducer'
 createActionTypes = require './utils/create_action_types'
@@ -16,34 +15,11 @@ trivialRedux = (endpoints, settings = {}) ->
   for name, endpoint of endpoints
     type = typeFrom(endpoint, settings, DEFAULT_ENDPOINT_TYPE)
     throw "Неизвестный endpoint type \"#{type}\"" unless actions[type]? && reducers[type]?
-    Object.keys(api).forEach (componentName) -> apiComponents[componentName](name, endpoint, settings, api, type)
+
+    Object.keys(api).forEach (component) ->
+      api[component][name] = components[componentName](name, endpoint, settings, api, type)
+
     plugins.forEach (plugin) -> plugin(name, endpoint, api)
-
-    # if typeof endpoint is 'object'
-
-    #   api.actions[name]  = actions[type](
-    #     name
-    #     endpoint.entry
-    #     # Применяем глобальные настройки
-    #     Object.assign({}, settings, endpoint)
-    #   )
-
-    #   api.reducers[name] = createReducer(
-    #     name
-    #     reducers[type]
-    #     endpoint.initialState
-    #     endpoint.reducer
-    #     api.actions[name]
-    #   )
-
-    #   api.types[name] = createActionTypes(name, api.actions[name])
-
-
-    # else
-    #   api.actions[name]  = actions[DEFAULT_ENDPOINT_TYPE](name, endpoint)
-    #   api.reducers[name] = createReducer(name, reducers[DEFAULT_ENDPOINT_TYPE])
-
-    #   api.types[name]    = createActionTypes(name, api.actions[name])
 
   api
 
