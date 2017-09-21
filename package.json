@@ -6,6 +6,7 @@
   "author": "",
   "scripts": {
     "test": "jest",
+    "cov": "jest --coverage",
     "build": "coffee -o lib/ -c src/",
     "pub": "npm run build && npm publish"
   },
