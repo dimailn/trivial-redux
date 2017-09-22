@@ -124,6 +124,12 @@ describe 'REST reducer', ->
     expect(state.fetching).toBe false
     expect(state.error).toBe error
 
+  test 'some action', ->
+    state = Object.assign({}, defaultStates.rest, data: { current: {}, collection: [title: 'some todo']})
+
+    expect(reducers.todos(state, type: 'SOME_ACTION_TYPE')).toEqual state
+
+
 
 
 
