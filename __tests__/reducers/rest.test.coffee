@@ -38,6 +38,55 @@ describe 'REST reducer', ->
     expect(state.error).toBe error
     expect(state.fetching).toBe false
 
+  test 'show pending', ->
+    state = Object.assign({}, defaultStates.rest)
+    state = reducers.todos(state, type: types.todos.show.load)
+    expect(state.fetching).toBe true
+
+  test 'show success', ->
+    todo = { title: 'something to do' }
+    state = Object.assign({}, defaultStates.rest)
+    state = reducers.todos(state, type: types.todos.show.success, payload: todo)
+
+    expect(state.fetching).toBe false
+    expect(state.data.current).toEqual todo
+
+  test 'show failure', ->
+    error = "Some error"
+    state = Object.assign({}, defaultStates.rest)
+    state = reducers.todos(state, type: types.todos.show.failure, response: error)
+
+    expect(state.error).toBe error
+    expect(state.fetching).toBe false
+
+  test 'reset without initial state', ->
+    state = Object.assign({}, defaultStates.rest, data: { current: {}, collection: [{}]})
+    state = reducers.todos(state, type: types.todos.reset)
+
+    expect(state).toEqual defaultStates.rest
+
+  test 'reset with initial state', ->
+    initialState = Object.assign({}, defaultStates.rest, someProp: 10, someRefProp: [{}])
+    api = trivialRedux(
+      todos:
+        entry: 'http://www.somesite.somedomain/todos'
+        initialState: initialState
+    )
+
+    state = api.reducers.todos(Object.assign({}, initialState), type: api.types.todos.reset)
+
+    expect(state).toEqual initialState
+
+
+  test 'update success', ->
+    newTitle = "New title"
+    state = Object.assign({}, defaultStates.rest)
+    state.data.collection.push { title: 'Something', id: 5 }
+
+    state = reducers.todos(state, type: types.todos.update.success, payload: { id: 5, title: newTitle})
+
+    expect(state.data.collection[0].title).toBe newTitle
+
 
 
 
