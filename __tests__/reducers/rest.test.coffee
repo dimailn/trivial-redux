@@ -80,12 +80,51 @@ describe 'REST reducer', ->
 
   test 'update success', ->
     newTitle = "New title"
-    state = Object.assign({}, defaultStates.rest)
-    state.data.collection.push { title: 'Something', id: 5 }
+    state = Object.assign({}, defaultStates.rest, data: Object.assign({}, defaultStates.rest.data))
+    state.data.collection = state.data.collection.concat [{ title: 'Something', id: 5 }]
 
     state = reducers.todos(state, type: types.todos.update.success, payload: { id: 5, title: newTitle})
 
     expect(state.data.collection[0].title).toBe newTitle
+
+  test 'nextPage pending', ->
+    state = Object.assign({}, defaultStates.rest)
+
+    state = reducers.todos(state, type: types.todos.nextPage.load, meta: { page: 1})
+    expect(state.fetching).toBe true
+
+  test 'nextPage success', ->
+    state = Object.assign({}, defaultStates.rest)
+
+    state = reducers.todos(state, type: types.todos.nextPage.success, meta: { page: 1}, payload: todos)
+
+    expect(state.fetching).toBe false
+    expect(state.data.collection).toEqual todos
+    expect(state.nextPage).toBe 2
+
+  test 'nextPage success - second page', ->
+    state = Object.assign({}, defaultStates.rest)
+    otherTodos = [{title: 'Onem more todo'}]
+
+    collection = todos.concat otherTodos
+
+    state = reducers.todos(state, type: types.todos.nextPage.success, payload: todos, meta: { page: 1})
+    state = reducers.todos(state, type: types.todos.nextPage.success, payload: otherTodos, meta: { page: 2})
+
+    expect(state.data.collection).toEqual collection
+    expect(state.nextPage).toBe 3
+    expect(state.fetching).toBe false
+
+  test 'nextPage failure', ->
+    state = Object.assign({}, defaultStates.rest)
+    error = "Some error"
+
+    state = reducers.todos(state, type: types.todos.nextPage.failure, response: error, meta: { page: 1})
+
+    expect(state.fetching).toBe false
+    expect(state.error).toBe error
+
+
 
 
 
