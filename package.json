@@ -4,6 +4,7 @@
   "description": "",
   "main": "lib/index.js",
   "author": "",
+  "repository": "https://github.com/dimailn/trivial-redux",
   "scripts": {
     "test": "jest",
     "cov": "jest --coverage",
