@@ -1,4 +1,7 @@
-# trivial-redux
+# trivial-redux 
+[![Build Status](https://travis-ci.org/dimailn/trivial-redux.svg?branch=master)](https://travis-ci.org/dimailn/trivial-redux)
+
+
 Trivial Redux is the library for fast creating API layer that gives you trivial CRUD from the box.
 It generates actions and reducers for standard REST queries. 
 The reducers are easy expandable through creating your own reducer that has convenient interface for access to 
@@ -36,7 +39,7 @@ All endpoints are considered as rest by default, but it can be changed:
 ```
 trivialRedux(
   todos: {
-    url: '...',
+    entry: '...',
     type: 'fetch'
   }
 )
@@ -52,7 +55,7 @@ You can't use it to save any your state.
 ```
 trivialRedux(
   todos: {
-    url: '...',
+    entry: '...',
     reducer: function(state, action){
       switch(action.type){
         case this.types.index.success:
