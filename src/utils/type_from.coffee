@@ -1,5 +1,14 @@
-module.exports = (endpoints, settings, defaultType) ->
-  if typeof endpoint is 'object'
+actions  = require '../actions'
+reducers = require '../reducers'
+
+DEFAULT_ENDPOINT_TYPE = 'rest'
+
+module.exports = (endpoints, settings) ->
+  type = if typeof endpoint is 'object'
     endpoint.type || settings.type || defaultType
   else
-    defaultType
+    DEFAULT_ENDPOINT_TYPE
+
+  throw "Неизвестный endpoint type \"#{type}\"" unless actions[type]? && reducers[type]?
+
+  type

@@ -1,23 +1,18 @@
-components        = require './components'
-plugins           = require './plugins'
-createReducer     = require './utils/create_reducer'
-createActionTypes = require './utils/create_action_types'
-typeFrom          = require './utils/type_from'
-
-DEFAULT_ENDPOINT_TYPE = 'rest'
+components = {createApi} = require './components'
+plugins                  = require './plugins'
+typeFrom                 = require './utils/type_from'
+defaultEndpointFor       = require './default_endpoint'
 
 trivialRedux = (endpoints, settings = {}) ->
-  api =
-    actions: {}
-    reducers: {}
-    types: {}
+  api = createApi()
 
   for name, endpoint of endpoints
-    type = typeFrom(endpoint, settings, DEFAULT_ENDPOINT_TYPE)
-    throw "Неизвестный endpoint type \"#{type}\"" unless actions[type]? && reducers[type]?
+    type = typeFrom(endpoint, settings)
 
-    Object.keys(api).forEach (component) ->
-      api[component][name] = components[componentName](name, endpoint, settings, api, type)
+    endpoint = defaultEndpointFor(endpoint) if typeof endpoint is 'string'
+
+    Object.keys(components).forEach (component) ->
+      api[component][name] = components[component](name, endpoint, settings, api, type)
 
     plugins.forEach (plugin) -> plugin(name, endpoint, api)
 
