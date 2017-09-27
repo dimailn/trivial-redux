@@ -5,12 +5,30 @@
   "main": "lib/index.js",
   "author": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "cov": "jest --coverage",
     "build": "coffee -o lib/ -c src/",
     "pub": "npm run build && npm publish"
   },
   "license": "ISC",
   "devDependencies": {
-    "coffee-script": "^1.12.6"
+    "babel-jest": "^21.0.2",
+    "coffee-script": "^1.12.6",
+    "jest": "^21.1.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "coffee"
+    ],
+    "transform": {
+      ".*": "./__tests__/preprocessor.js"
+    },
+    "testMatch": [
+      "**/__tests__/**/*.js(x)",
+      "**/__tests__/**/*.coffee",
+      "*/?(*.)(spec|test).js(x)",
+      "*/?(*.)(spec|test).coffee"
+    ]
   }
 }
