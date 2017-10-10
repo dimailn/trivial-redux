@@ -31,7 +31,7 @@ trivialRedux = (endpoints, settings = {}) ->
         endpoint.reducer
         api.actions[name]
         endpoint.decorators
-      )
+      ) unless endpoint.reducer == null
 
       api.types[name] = createActionTypes(name, api.actions[name])
 
