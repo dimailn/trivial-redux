@@ -142,7 +142,7 @@ You may pass the global configuration object as second argument of trivialRedux 
 
 ### Configuration object properties
 #### entry
-Entry url for then endpoint.
+Entry url for the endpoint.
 #### type
 The type of endpoint, rest or fetch.
 #### skipFormat
