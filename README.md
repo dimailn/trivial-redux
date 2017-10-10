@@ -141,6 +141,8 @@ Clears data.collection
 You may pass the global configuration object as second argument of trivialRedux fabric. The endpoints's settings are override global.
 
 ### Configuration object properties
+#### entry
+Entry url for then endpoint.
 #### type
 The type of endpoint, rest or fetch.
 #### skipFormat
