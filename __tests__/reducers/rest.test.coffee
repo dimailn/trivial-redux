@@ -34,7 +34,6 @@ describe 'REST reducer', ->
     error = 'Some error'
     state = Object.assign({}, defaultStates.rest)
     state = reducers.todos(state, type: types.todos.index.failure, response: error)
-    console.log types.todos.index.failure
     expect(state.error).toBe error
     expect(state.fetching).toBe false
 
