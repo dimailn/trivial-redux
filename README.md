@@ -152,6 +152,6 @@ The custom reducer for your own logic. If it is null, the reducer for the curren
 #### initialState
 The initial state for the reducer
 #### decorators
-The array of reducer decorators. Decorator is a function which takes reducer and wraps it with own custom logic.
+The array of reducer decorators. Decorator is a function which takes reducer and wraps it with its own custom logic.
 #### host
 The host for url prefix
