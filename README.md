@@ -146,8 +146,10 @@ The type of endpoint, rest or fetch.
 #### skipFormat
 The option for skip .json postfix that concatenates by default.
 #### reducer
-The custom reducer for your own logic
+The custom reducer for your own logic. If it is null, the reducer for the current endpoint will be omitted.
 #### initialState
 The initial state for the reducer
+#### decorators
+The array of reducer decorators. Decorator is a function which takes reducer and wraps it with own custom logic.
 #### host
 The host for url prefix
