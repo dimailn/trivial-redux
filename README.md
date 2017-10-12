@@ -25,7 +25,7 @@ Install package via npm
 
 or yarn
 
-```yarn install trivial-redux```
+```yarn add trivial-redux```
 
 ## Getting started
 trivialRedux is the fabric for creating api object:
