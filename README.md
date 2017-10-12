@@ -13,6 +13,7 @@ There are some tasks that don't fit the pattern and it is easier to solve them w
 ## Table of contents
 - [Installation](#installation)
 - [Getting started](#getting-started)
+- [Recommended file structure](#recommended-file-structure)
 - [Reducers override](#reducers-override)
 - [The endpoint state structure](#the-endpoint-state-structure)
 - [Actions description](#actions-description)
@@ -67,6 +68,30 @@ trivialRedux(
 
 All options for configuration object you may see below.
 
+## Recommended file structure
+We recommend to keep complex endpoint in separate files:
+```
+|-- api.js
+|-- endpoints
+    |-- todos.js
+    |-- comments.js
+```
+
+And aggregate them in main entry point
+ ```javascript
+ // api.js
+ import trivialRedux from 'trivial-redux'
+ 
+ import todos from './endpoints/todos'
+ import comments from './endpoints/comments'
+ 
+ export default trivialRedux(
+  {
+    todos,
+    comments
+  }
+ )
+```
 ## Reducers override
 You can define your own reducer in the configuration object. It will have access to the standard trivial-redux reducer through this.reducer and types through this.types.
 
