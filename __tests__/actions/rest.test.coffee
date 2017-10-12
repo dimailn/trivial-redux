@@ -2,9 +2,12 @@ trivialRedux   = require '../../src/index'
 actionTypesFor = require '../../src/action_types'
 actionTypeFor  = require '../../src/action_type'
 
-api = trivialRedux(
-  todos: 'http://www.somesite.somedomain/todos'
-)
+api = null
+
+beforeEach ->
+  api = trivialRedux(
+    todos: 'http://www.somesite.somedomain/todos'
+  )
 
 describe 'REST actions', ->
   test 'index without params', ->
@@ -27,6 +30,19 @@ describe 'REST actions', ->
       {
         todos:
           entry: '~todos'
+      }
+      {
+        host: 'http://www.somesite.somedomain/'
+      }
+    )
+
+    {meta: {fetch}} = api.actions.todos.index()
+    expect(fetch.url).toBe 'http://www.somesite.somedomain/todos.json'
+
+  test 'index without params with own host(simple endpoint description)', ->
+    api = trivialRedux(
+      {
+        todos: '~todos'
       }
       {
         host: 'http://www.somesite.somedomain/'
