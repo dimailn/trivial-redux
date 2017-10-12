@@ -10,6 +10,24 @@ the generated reducer, action types and the default state.
 Trivial Redux was creating for generating only the part of the store structure(api entities, generally).
 There are some tasks that don't fit the pattern and it is easier to solve them without this library.
 
+## Table of contents
+- [Installation](#installation)
+- [Getting started](#getting-started)
+- [Reducers override](#reducers-override)
+- [The endpoint state structure](#the-endpoint-state-structure)
+- [Actions description](#actions-description)
+  
+
+## Installation
+Install package via npm
+
+```npm install trivial-redux --save```
+
+or yarn
+
+```yarn install trivial-redux```
+
+## Getting started
 trivialRedux is the fabric for creating api object:
 
 ```javascript
@@ -48,7 +66,7 @@ trivialRedux(
 
 All options for configuration object you may see below.
 
-# Reducers override
+## Reducers override
 You can define your own reducer in the configuration object. It will have access to the standard trivial-redux reducer through this.reducer and types through this.types.
 
 Note: *this* in reducer is immutable context for more convenient pass of useful data from trivial-redux to your reducer.
