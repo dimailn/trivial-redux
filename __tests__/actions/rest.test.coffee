@@ -25,7 +25,7 @@ describe 'REST actions', ->
   test 'index without params with own host', ->
     api = trivialRedux(
       {
-        todos: 
+        todos:
           entry: '~todos'
       }
       {
@@ -84,7 +84,7 @@ describe 'REST actions', ->
     dispatch = jest.fn dispatch
 
 
-    fAction = api.actions.todos.nextPage() 
+    fAction = api.actions.todos.nextPage()
     fAction(dispatch, getState)
 
     expect(dispatch).toHaveBeenCalled()
