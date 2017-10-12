@@ -14,6 +14,7 @@ trivialRedux is the fabric for creating api object:
 
 ```javascript
 import trivialRedux from 'trivial-redux'
+
 const api = trivialRedux(
   todos: 'http://some_site.com/todos',
   comments: 'http://some_site.com/posts'
