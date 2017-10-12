@@ -31,5 +31,8 @@
       "*/?(*.)(spec|test).js(x)",
       "*/?(*.)(spec|test).coffee"
     ]
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
   }
 }
