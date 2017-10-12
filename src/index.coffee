@@ -38,7 +38,7 @@ trivialRedux = (endpoints, settings = {}) ->
       plugins.forEach (plugin) -> plugin(name, endpoint, api)
 
     else
-      api.actions[name]  = actions[DEFAULT_ENDPOINT_TYPE](name, endpoint)
+      api.actions[name]  = actions[DEFAULT_ENDPOINT_TYPE](name, endpoint, settings)
       api.reducers[name] = createReducer(name, reducers[DEFAULT_ENDPOINT_TYPE])
       api.types[name] = createActionTypes(name, api.actions[name])
 
