@@ -12,9 +12,9 @@ There are some tasks that don't fit the pattern and it is easier to solve them w
 
 trivialRedux is the fabric for creating api object:
 
-```
-trivialRedux = require 'trivial-redux'
-api = trivialRedux(
+```javascript
+import trivialRedux from 'trivial-redux'
+const api = trivialRedux(
   todos: 'http://some_site.com/todos',
   comments: 'http://some_site.com/posts'
 )
@@ -28,7 +28,7 @@ contains action creators for standard rest queries + reset action for clearing t
 
 So, then we can do something like this:
 
-```
+```javascript
 store.dispatch(api.actions.todos.index())
 ```
 
@@ -36,7 +36,7 @@ The endpoint configuration may be more detailed, then we use object instead of u
 For example, Trivial Redux contains two types of endpoints - rest and fetch(more simple). 
 All endpoints are considered as rest by default, but it can be changed:
 
-```
+```javascript
 trivialRedux(
   todos: {
     entry: '...',
@@ -52,7 +52,7 @@ You can define your own reducer in the configuration object. It will have access
 
 Note: *this* in reducer is immutable context for more convenient pass of useful data from trivial-redux to your reducer.
 You can't use it to save any your state.
-```
+```javascript
 trivialRedux(
   todos: {
     entry: '...',
@@ -79,7 +79,7 @@ trivialRedux(
 
 ## The endpoint state structure
 ### REST
-```
+```javascript
 {
   lastUpdatedAt: null,
   data: {
@@ -98,7 +98,7 @@ trivialRedux(
 * fetching - the flag of fetching state
 
 ### Fetch
-```
+```javascript
 {
   lastUpdatedAt: null,
   data: null,
