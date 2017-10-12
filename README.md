@@ -16,6 +16,7 @@ There are some tasks that don't fit the pattern and it is easier to solve them w
 - [Reducers override](#reducers-override)
 - [The endpoint state structure](#the-endpoint-state-structure)
 - [Actions description](#actions-description)
+- [Configuration object](#configuration-object)
   
 
 ## Installation
