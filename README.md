@@ -65,7 +65,7 @@ trivialRedux(
           // We can do some custom logic here
           // and generate state by our result and the stanard reducer result
           return {...someResult, this.reducer(state, action) }
-        case this.types.destroy:
+        case this.types.destroy.failure:
           // or we can not use the standard reducer
           // do something
           // return something
