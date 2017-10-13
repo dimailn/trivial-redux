@@ -104,3 +104,31 @@ describe 'REST actions', ->
     fAction(dispatch, getState)
 
     expect(dispatch).toHaveBeenCalled()
+
+  test 'nextPage with extra', ->
+    api = trivialRedux(
+      todos:
+        entry: 'http://www.somesite.somedomain/todos'
+        extra:
+          meta:
+            skipSome: true
+    )
+
+    getState = ->
+      todos:
+        nextPage: 2
+
+    dispatch = (action) ->
+      console.log action
+      {meta: {fetch}} = action
+      expect(fetch.url).toBe 'http://www.somesite.somedomain/todos.json'
+      expect(fetch.params).toEqual {page: 2}
+      expect(action.meta.skipSome).toBe true
+
+    dispatch = jest.fn dispatch
+
+    fAction = api.actions.todos.nextPage()
+    fAction(dispatch, getState)
+
+    expect(dispatch).toHaveBeenCalled()
+
