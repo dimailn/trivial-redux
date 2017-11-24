@@ -3,7 +3,7 @@ actionTypesFor = require '../../src/action_types'
 actionTypeFor  = require '../../src/action_type'
 
 api = trivialRedux(
-  todos: 
+  todos:
     entry:'http://www.somesite.somedomain/todos'
     type: 'fetch'
 )
@@ -38,7 +38,7 @@ describe 'Fetch actions', ->
 
   test 'fetch with skipFormat', ->
     api = trivialRedux(
-      todos: 
+      todos:
         entry:'http://www.somesite.somedomain/todos'
         type: 'fetch'
         skipFormat: true

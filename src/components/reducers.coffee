@@ -8,4 +8,5 @@ module.exports = (name, endpoint, settings, api, type) ->
     endpoint.initialState
     endpoint.reducer
     api.actions[name]
+    endpoint.decorators
   )

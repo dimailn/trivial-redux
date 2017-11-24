@@ -1,6 +1,6 @@
 {
   "name": "trivial-redux",
-  "version": "1.4.3",
+  "version": "1.5.3",
   "description": "",
   "main": "lib/index.js",
   "author": "",
@@ -31,5 +31,8 @@
       "*/?(*.)(spec|test).js(x)",
       "*/?(*.)(spec|test).coffee"
     ]
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
   }
 }

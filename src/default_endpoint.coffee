@@ -3,3 +3,4 @@ module.exports = (entry) ->
   skipFormat: false
   reducer: undefined
   entry: entry
+  decorators: []

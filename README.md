@@ -12,11 +12,14 @@ There are some tasks that don't fit the pattern and it is easier to solve them w
 
 trivialRedux is the fabric for creating api object:
 
-```
-trivialRedux = require 'trivial-redux'
-api = trivialRedux(
-  todos: 'http://some_site.com/todos',
-  comments: 'http://some_site.com/posts'
+```javascript
+import trivialRedux from 'trivial-redux'
+
+const api = trivialRedux(
+  {
+    todos: 'http://some_site.com/todos',
+    comments: 'http://some_site.com/posts'
+  }
 )
 ```
 
@@ -28,7 +31,7 @@ contains action creators for standard rest queries + reset action for clearing t
 
 So, then we can do something like this:
 
-```
+```javascript
 store.dispatch(api.actions.todos.index())
 ```
 
@@ -36,7 +39,7 @@ The endpoint configuration may be more detailed, then we use object instead of u
 For example, Trivial Redux contains two types of endpoints - rest and fetch(more simple). 
 All endpoints are considered as rest by default, but it can be changed:
 
-```
+```javascript
 trivialRedux(
   todos: {
     entry: '...',
@@ -52,7 +55,7 @@ You can define your own reducer in the configuration object. It will have access
 
 Note: *this* in reducer is immutable context for more convenient pass of useful data from trivial-redux to your reducer.
 You can't use it to save any your state.
-```
+```javascript
 trivialRedux(
   todos: {
     entry: '...',
@@ -62,7 +65,7 @@ trivialRedux(
           // We can do some custom logic here
           // and generate state by our result and the stanard reducer result
           return {...someResult, this.reducer(state, action) }
-        case this.types.destroy:
+        case this.types.destroy.failure:
           // or we can not use the standard reducer
           // do something
           // return something
@@ -79,7 +82,7 @@ trivialRedux(
 
 ## The endpoint state structure
 ### REST
-```
+```javascript
 {
   lastUpdatedAt: null,
   data: {
@@ -98,7 +101,7 @@ trivialRedux(
 * fetching - the flag of fetching state
 
 ### Fetch
-```
+```javascript
 {
   lastUpdatedAt: null,
   data: null,
@@ -141,13 +144,17 @@ Clears data.collection
 You may pass the global configuration object as second argument of trivialRedux fabric. The endpoints's settings are override global.
 
 ### Configuration object properties
+#### entry
+Entry url for the endpoint.
 #### type
 The type of endpoint, rest or fetch.
 #### skipFormat
 The option for skip .json postfix that concatenates by default.
 #### reducer
-The custom reducer for your own logic
+The custom reducer for your own logic. If it is null, the reducer for the current endpoint will be omitted.
 #### initialState
 The initial state for the reducer
+#### decorators
+The array of reducer decorators. Decorator is a function which takes reducer and wraps it with its own custom logic.
 #### host
 The host for url prefix
