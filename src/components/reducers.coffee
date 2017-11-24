@@ -6,5 +6,5 @@ module.exports = (name, endpoint, settings, api, type) ->
     name
     reducers[type]
     endpoint
-    api.actions[name]
+    api.types
   )
