@@ -3,7 +3,7 @@ reducers = require '../reducers'
 
 DEFAULT_ENDPOINT_TYPE = 'rest'
 
-module.exports = (endpoints, settings) ->
+module.exports = (endpoint, settings) ->
   type = if typeof endpoint is 'object'
     endpoint.type || settings.type || defaultType
   else
