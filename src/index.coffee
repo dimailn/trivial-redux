@@ -1,7 +1,9 @@
-components = {createApi} = require './components'
+{components, createApi} = require './components'
 plugins                  = require './plugins'
 typeFrom                 = require './utils/type_from'
 defaultEndpointFor       = require './default_endpoint'
+
+actionTypesFor           = require './action_types'
 
 trivialRedux = (endpoints, settings = {}) ->
   api = createApi()
@@ -26,6 +28,11 @@ trivialRedux = (endpoints, settings = {}) ->
 
 module.exports = trivialRedux
 
-module.exports.actionTypesFor = require './action_types'
+
+module.exports.actionTypesFor = (args...) ->
+  console.warn(
+    "[trivial-redux] actionTypesFor helper is deprecated and will be removed in next major version. Use api.typesFor instead."
+  )
+  actionTypesFor(args...)
 
 module.exports.defaultStates  = require './states'

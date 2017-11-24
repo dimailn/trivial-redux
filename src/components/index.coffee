@@ -5,6 +5,6 @@ components =
   types: require './types'
   reducers: require './reducers'
 
-module.exports = components
+module.exports.components = components
 
 module.exports.createApi = -> mapValues(components, -> {})
