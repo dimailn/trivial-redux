@@ -1,3 +1,5 @@
+{mapValues} = require 'lodash'
+
 components =
   actions: require './actions'
   reducers: require './reducers'
@@ -5,7 +7,4 @@ components =
 
 module.exports = components
 
-module.exports.createApi = -> Object.keys(components).reduce(
-  (api, name) -> api[name] = {}; api
-  {}
-)
+module.exports.createApi = -> mapValues(components, -> {})
