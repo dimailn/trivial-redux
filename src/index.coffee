@@ -9,7 +9,13 @@ trivialRedux = (endpoints, settings = {}) ->
   for name, endpoint of endpoints
     type = typeFrom(endpoint, settings)
 
-    endpoint = defaultEndpointFor(endpoint) if typeof endpoint is 'string'
+    defaultEndpoint = defaultEndpointFor(endpoint)
+
+    endpoint = 
+      if typeof endpoint is 'string'
+        defaultEndpoint
+      else
+        endpoint = Object.assign({}, defaultEndpoint, endpoint)
 
     Object.keys(components).forEach (component) ->
       api[component][name] = components[component](name, endpoint, settings, api, type)
