@@ -1,7 +1,9 @@
 createReducerContext = require './create_reducer_context'
 
 
-module.exports = (entityName, reducerFactory, initialState, customReducer = null, actions = null, decorators, allTypes = null) ->
+module.exports = (entityName, reducerFactory, endpoint, actions = null, allTypes = null) ->
+  {initialState, reducer: customReducer, decorators} = endpoint
+
   innerContext = createReducerContext(entityName, actions)
   reducer = reducerFactory(entityName, initialState || reducerFactory.defaultState)
   reducer = reducer.bind(innerContext)

@@ -5,8 +5,6 @@ module.exports = (name, endpoint, settings, api, type) ->
   createReducer(
     name
     reducers[type]
-    endpoint.initialState
-    endpoint.reducer
+    endpoint
     api.actions[name]
-    endpoint.decorators
   )

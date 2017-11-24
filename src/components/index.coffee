@@ -2,8 +2,8 @@
 
 components =
   actions: require './actions'
-  reducers: require './reducers'
   types: require './types'
+  reducers: require './reducers'
 
 module.exports = components
 
