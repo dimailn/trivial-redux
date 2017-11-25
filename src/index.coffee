@@ -1,51 +1,38 @@
-actions           = require './actions'
-reducers          = require './reducers'
-plugins           = require './plugins'
-createReducer     = require './utils/create_reducer'
-createActionTypes = require './utils/create_action_types'
+{components, createApi} = require './components'
+plugins                  = require './plugins'
+typeFrom                 = require './utils/type_from'
+defaultEndpointFor       = require './default_endpoint'
 
-DEFAULT_ENDPOINT_TYPE = 'rest'
+actionTypesFor           = require './action_types'
 
 trivialRedux = (endpoints, settings = {}) ->
-  api =
-    actions: {}
-    reducers: {}
-    types: {}
+  api = createApi()
 
   for name, endpoint of endpoints
-    if typeof endpoint is 'object'
-      type = endpoint.type || settings.type || DEFAULT_ENDPOINT_TYPE
-      throw "Неизвестный endpoint type \"#{type}\"" unless actions[type]? && reducers[type]?
+    type = typeFrom(endpoint, settings)
 
-      api.actions[name]  = actions[type](
-        name
-        endpoint.entry
-        # Применяем глобальные настройки
-        Object.assign({}, settings, endpoint)
-      )
+    defaultEndpoint = defaultEndpointFor(endpoint)
 
-      api.reducers[name] = createReducer(
-        name
-        reducers[type]
-        endpoint.initialState
-        endpoint.reducer
-        api.actions[name]
-        endpoint.decorators
-      ) unless endpoint.reducer == null
+    endpoint = 
+      if typeof endpoint is 'string'
+        defaultEndpoint
+      else
+        endpoint = Object.assign({}, defaultEndpoint, endpoint)
 
-      api.types[name] = createActionTypes(name, api.actions[name])
+    Object.keys(components).forEach (component) ->
+      api[component][name] = components[component](name, endpoint, settings, api, type)
 
-      plugins.forEach (plugin) -> plugin(name, endpoint, api)
-
-    else
-      api.actions[name]  = actions[DEFAULT_ENDPOINT_TYPE](name, endpoint, settings)
-      api.reducers[name] = createReducer(name, reducers[DEFAULT_ENDPOINT_TYPE])
-      api.types[name] = createActionTypes(name, api.actions[name])
+    plugins.forEach (plugin) -> plugin(name, endpoint, api)
 
   api
 
 module.exports = trivialRedux
 
-module.exports.actionTypesFor = require './action_types'
+
+module.exports.actionTypesFor = (args...) ->
+  console.warn(
+    "[trivial-redux] actionTypesFor helper is deprecated and will be removed in next major version. Use this.allTypes in the reducers or api.typesFor otherwise instead."
+  )
+  actionTypesFor(args...)
 
 module.exports.defaultStates  = require './states'

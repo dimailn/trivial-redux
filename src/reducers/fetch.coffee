@@ -3,17 +3,15 @@ actionTypeFor  = require '../action_type'
 defaultState   = require '../states/fetch'
 
 createFetchReducerFor = (entity_name, initialState) ->
-  indexTypes = actionTypesFor('fetch', entity_name)
-  RESET_ACTION = actionTypeFor('reset', entity_name)
   (state = initialState, action) ->
     switch action.type
-      when indexTypes.load
+      when @types.fetch.load
         Object.assign({}, state, fetching: true)
-      when indexTypes.success
+      when @types.fetch.success
         lastUpdatedAt: new Date().getTime(), data: action.payload, fetching: false
-      when indexTypes.failure
+      when @types.fetch.failure
         Object.assign({}, state, data: action.payload, fetching: false)
-      when RESET_ACTION
+      when @types.reset
         Object.assign({}, state, initialState)
       else
         state

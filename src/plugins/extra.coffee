@@ -6,7 +6,6 @@ applyExtra = (actions, extra) ->
     do (actionCreator) ->
       actionsWithExtra[actionName] =  (args...) ->
         action = actionCreator(args...)
-        console.log action
         if typeof action is 'function'
           (dispatch, getState, extraArgument) ->
             dispatchWrapper = (a) -> dispatch(_.merge(_.cloneDeep(a), extra))

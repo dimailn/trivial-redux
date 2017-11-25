@@ -19,28 +19,22 @@ handleNextPage = (state, action, types) ->
       Object.assign({}, state, fetching: false, error: action.response)
 
 createRestReducerFor = (entity_name, initialState) ->
-  indexTypes    = actionTypesFor('index', entity_name)
-  showTypes     = actionTypesFor('show', entity_name)
-  updateTypes   = actionTypesFor('update', entity_name)
-  nextPageTypes = actionTypesFor('nextPage', entity_name)
-
-  RESET_ACTION = actionTypeFor('reset', entity_name)
   (state = initialState, action) ->
     switch action.type
       # index
-      when indexTypes.load
+      when @types.index.load
         Object.assign({}, state, fetching: true)
-      when indexTypes.success
+      when @types.index.success
         lastUpdatedAt: new Date().getTime()
         data: Object.assign({}, state.data, collection: action.payload)
         fetching: false
         error: null
-      when indexTypes.failure
+      when @types.index.failure
         Object.assign({}, state, fetching: false, error: action.response)
       # show
-      when showTypes.load
+      when @types.show.load
         Object.assign({}, state, fetching: true)
-      when showTypes.success
+      when @types.show.success
         Object.assign(
           {}
           state
@@ -49,16 +43,16 @@ createRestReducerFor = (entity_name, initialState) ->
             fetching: false
           }
         )
-      when showTypes.failure
+      when @types.show.failure
         Object.assign({}, state, fetching: false, error: action.response)
       # reset
-      when RESET_ACTION
+      when @types.reset
         Object.assign({}, initialState)
       # nextPage
-      when nextPageTypes.load, nextPageTypes.success, nextPageTypes.failure
+      when @types.nextPage.load, @types.nextPage.success, @types.nextPage.failure
         return state unless action.meta.page == state.nextPage || !state.nextPage?
-        handleNextPage(state, action, nextPageTypes)
-      when updateTypes.success
+        handleNextPage.bind(@)(state, action, @types.nextPage)
+      when @types.update.success
         Object.assign(
           {},
           state,

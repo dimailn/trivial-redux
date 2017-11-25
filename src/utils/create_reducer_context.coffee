@@ -1,10 +1,11 @@
 createActionTypes = require './create_action_types'
 
-createReducerContext = (entityName, actions, reducer) ->
-  context = {}
-  context.types   = createActionTypes(entityName, actions)
-  context.reducer = reducer
+createReducerContext = (entityName, allTypes, reducer) ->
+  context = {
+    types: allTypes[entityName]
+    reducer: reducer
+    allTypes: allTypes
+  }
   Object.freeze(context)
-
 
 module.exports = createReducerContext
