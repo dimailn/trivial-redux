@@ -1,5 +1,6 @@
 createReducerContext = require './create_reducer_context'
 
+createReducerFromDescriptor = require './create_reducer_from_descriptor'
 
 module.exports = (entityName, reducerFactory, endpoint, allTypes) ->
   {initialState, reducer: customReducer, decorators} = endpoint
@@ -10,9 +11,16 @@ module.exports = (entityName, reducerFactory, endpoint, allTypes) ->
   # Если не задан кастомный редьюсер - возвращаем стандартный
   return reducer unless customReducer?
 
-  # Прикрепляем контекст
   context = createReducerContext(entityName, allTypes, reducer)
-  customReducer = customReducer.bind(context)
+
+  # Прикрепляем контекст
+  customReducer = 
+    if typeof customReducer is 'object'
+      createReducerFromDescriptor(customReducer, context).bind(context)
+    else
+      customReducer.bind(context)
+
+  Object.freeze(context)
 
   # Применяем декораторы
   customReducer = decorators.reduce(

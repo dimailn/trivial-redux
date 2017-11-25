@@ -119,7 +119,6 @@ describe 'REST actions', ->
         nextPage: 2
 
     dispatch = (action) ->
-      console.log action
       {meta: {fetch}} = action
       expect(fetch.url).toBe 'http://www.somesite.somedomain/todos.json'
       expect(fetch.params).toEqual {page: 2}
