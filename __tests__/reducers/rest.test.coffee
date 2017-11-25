@@ -129,21 +129,24 @@ describe 'REST reducer', ->
     expect(reducers.todos(state, type: 'SOME_ACTION_TYPE')).toEqual state
 
   test 'allTypes from custom REST reducer', ->
+    reducer = jest.fn (state, action) ->
+      expect(@allTypes).toBeDefined()
+      expect(@allTypes.comments).toBeDefined()
+      expect(@allTypes.todos).toBe @types
+      expect(@allTypes.comments.index).toBeDefined()
+      expect(@allTypes.comments).toBe api.types.comments
+
     api = trivialRedux(
       todos: 
         entry: 'http://www.somesite.somedomain/todos'
-        reducer: (state, action) ->
-          expect(@allTypes).toBeDefined()
-          expect(@allTypes.comments).toBeDefined()
-          expect(@allTypes.todos).toBe @types
-          expect(@allTypes.comments.index).toBeDefined()
-          expect(@allTypes.comments).toBe api.types.comments
+        reducer: reducer
 
       comments: 'http://www.somesite.somedomain/comments'
     )
 
     state = Object.assign({}, defaultStates.rest)
     api.reducers.todos(state, api.actions.todos.index())
+    expect(reducer).toBeCalled()
 
 
 
