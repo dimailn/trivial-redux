@@ -21,13 +21,31 @@ There are some tasks that don't fit the pattern and it is easier to solve them w
   
 
 ## Installation
-Install package via npm
+Install packages via npm
 
-```npm install trivial-redux --save```
+```npm install trivial-redux trivial-redux-middleware --save```
 
 or yarn
 
-```yarn add trivial-redux```
+```yarn add trivial-redux trivial-redux-middleware```
+
+During store initialize pass the middleware and generated reducers
+
+```javascript
+import {createStore, combineReducers, applyMiddleware} from 'redux'
+import trivialRedux from 'trivial-redux'
+import trivialReduxMiddleware from 'trivial-redux-middleware'
+import endpoints from './endpoints'
+import reducers from './modules'
+
+const api = trivialRedux(endpoints)
+const rootReducer = combineReducers({...reducers, ...api.reducers })
+const middlewares = [
+  trivialReduxMiddleware
+]
+
+export default createStore(rootReducer, applyMiddleware(...middlewares))
+```
 
 ## Getting started
 trivialRedux is the fabric for creating api object:
