@@ -10,6 +10,45 @@ the generated reducer, action types and the default state.
 Trivial Redux was creating for generating only the part of the store structure(api entities, generally).
 There are some tasks that don't fit the pattern and it is easier to solve them without this library.
 
+## Table of contents
+- [Installation](#installation)
+- [Getting started](#getting-started)
+- [Recommended file structure](#recommended-file-structure)
+- [Reducers override](#reducers-override)
+- [Decorators](#decorators)
+- [The endpoint state structure](#the-endpoint-state-structure)
+- [Actions description](#actions-description)
+- [Configuration object](#configuration-object)
+  
+
+## Installation
+Install packages via npm
+
+```npm install trivial-redux trivial-redux-middleware --save```
+
+or yarn
+
+```yarn add trivial-redux trivial-redux-middleware```
+
+During store initialize pass the middleware and generated reducers
+
+```javascript
+import {createStore, combineReducers, applyMiddleware} from 'redux'
+import trivialRedux from 'trivial-redux'
+import trivialReduxMiddleware from 'trivial-redux-middleware'
+import endpoints from './endpoints'
+import reducers from './modules'
+
+const api = trivialRedux(endpoints)
+const rootReducer = combineReducers({...reducers, ...api.reducers })
+const middlewares = [
+  trivialReduxMiddleware
+]
+
+export default createStore(rootReducer, applyMiddleware(...middlewares))
+```
+
+## Getting started
 trivialRedux is the fabric for creating api object:
 
 ```javascript
@@ -50,7 +89,31 @@ trivialRedux(
 
 All options for configuration object you may see below.
 
-# Reducers override
+## Recommended file structure
+We recommend to keep complex endpoint in separate files:
+```
+|-- api.js
+|-- endpoints
+    |-- todos.js
+    |-- comments.js
+```
+
+And aggregate them in main entry point
+ ```javascript
+ // api.js
+ import trivialRedux from 'trivial-redux'
+ 
+ import todos from './endpoints/todos'
+ import comments from './endpoints/comments'
+ 
+ export default trivialRedux(
+  {
+    todos,
+    comments
+  }
+ )
+```
+## Reducers override
 You can define your own reducer in the configuration object. It will have access to the standard trivial-redux reducer through this.reducer and types through this.types.
 
 Note: *this* in reducer is immutable context for more convenient pass of useful data from trivial-redux to your reducer.
@@ -78,6 +141,37 @@ trivialRedux(
     }
   }
 )
+```
+## Decorators
+
+Sometimes you have common logic for the reducers(pagination, for example). In this case you can write this logic once in reducer decorator and use it wherever you need it. 
+
+```javascript
+
+// define you decorator
+const PaginationDecorator = function(reducer){
+  return function(state, action){
+    // here you have access to this.types, etc
+    switch(action.type){
+      case this.types.index:
+        return { ...reducer(state, action), ...awesomePagination }
+       default:
+        return reducer(state, action)
+    }
+  }
+}
+
+// and use it in endpoint config
+
+trivialRedux(
+  {
+    todos: {
+        entry: '~todos',
+        decorators: [PaginationDecorator]
+    }
+  }
+)
+
 ```
 
 ## The endpoint state structure
