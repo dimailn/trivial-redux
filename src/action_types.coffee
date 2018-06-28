@@ -8,7 +8,7 @@ whitelist = [
   'nodeType'
 ]
 
-if Proxy?
+if Proxy? && process.env.NODE_ENV is 'development'
   actionTypesForWithProxy = (action_name, entity_name) ->
     new Proxy(
       actionTypesFor(action_name, entity_name)
