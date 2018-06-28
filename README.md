@@ -164,7 +164,7 @@ const PaginationDecorator = function(reducer){
 trivialRedux(
   {
     todos: {
-        entry: '~todos'
+        entry: '~todos',
         decorators: [PaginationDecorator]
     }
   }
