@@ -15,6 +15,7 @@ There are some tasks that don't fit the pattern and it is easier to solve them w
 - [Getting started](#getting-started)
 - [Recommended file structure](#recommended-file-structure)
 - [Reducers override](#reducers-override)
+- [Decorators](#decorators)
 - [The endpoint state structure](#the-endpoint-state-structure)
 - [Actions description](#actions-description)
 - [Configuration object](#configuration-object)
@@ -138,6 +139,37 @@ trivialRedux(
     }
   }
 )
+```
+## Decorators
+
+Sometimes you have common logic for the reducers(pagination, for example). In this case you can write this logic once in reducer decorator and use it wherever you need it. 
+
+```javascript
+
+// define you decorator
+const PaginationDecorator = function(reducer){
+  return function(state, action){
+    // here you have access to this.types, etc
+    switch(action.type){
+      case this.types.index:
+        return { ...reducer(state, action), ...awesomePagination }
+       default:
+        return reducer(state, action)
+    }
+  }
+}
+
+// and use it in endpoint config
+
+trivialRedux(
+  {
+    todos: {
+        entry: '~todos'
+        decorators: [PaginationDecorator]
+    }
+  }
+)
+
 ```
 
 ## The endpoint state structure
