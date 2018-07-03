@@ -19,6 +19,7 @@ There are some tasks that don't fit the pattern and it is easier to solve them w
 - [The endpoint state structure](#the-endpoint-state-structure)
 - [Actions description](#actions-description)
 - [Configuration object](#configuration-object)
+- [Roadmap](#roadmap)
   
 
 ## Installation
@@ -252,3 +253,11 @@ The initial state for the reducer
 The array of reducer decorators. Decorator is a function which takes reducer and wraps it with its own custom logic.
 #### host
 The host for url prefix
+
+
+## Roadmap
+* Immutable reducers
+* Custom actions
+* Aliases
+* Extended decorators
+
