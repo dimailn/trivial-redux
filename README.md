@@ -31,7 +31,7 @@ or yarn
 
 ```yarn add trivial-redux trivial-redux-middleware```
 
-During store initialize pass the middleware and generated reducers
+During store initialization pass the middleware and generated reducers
 
 ```javascript
 import {createStore, combineReducers, applyMiddleware} from 'redux'
