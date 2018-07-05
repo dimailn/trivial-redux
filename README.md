@@ -204,6 +204,11 @@ trivialRedux(
 }
 ```
 
+### Setter
+```javascript
+null
+```
+
 ## Actions description
 ### REST
 #### index(params)
@@ -232,6 +237,12 @@ Clears data.collection
 
 ### Fetch
 #### fetch(idOrParams, params)
+
+#### reset()
+
+### Setter
+
+#### set(data)
 
 #### reset()
 
