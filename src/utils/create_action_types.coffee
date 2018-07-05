@@ -5,7 +5,7 @@ createActionTypes = (entityName, actions) ->
   actionTypes = {}
   for name, ac of actions
     actionTypes[name] =
-      if name is 'reset'
+      if ['set', 'reset'].includes(name)
         actionTypeFor(name, entityName)
       else
         actionTypesFor(name, entityName)
