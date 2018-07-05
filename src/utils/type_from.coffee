@@ -9,6 +9,6 @@ module.exports = (endpoint, settings) ->
   else
     DEFAULT_ENDPOINT_TYPE
 
-  throw "Неизвестный endpoint type \"#{type}\"" unless actions[type]? && reducers[type]?
+  throw "Unknown endpoint type \"#{type}\"" unless actions[type]? && reducers[type]?
 
   type
