@@ -76,7 +76,7 @@ store.dispatch(api.actions.todos.index())
 ```
 
 The endpoint configuration may be more detailed, then we use object instead of url string.
-For example, Trivial Redux contains two types of endpoints - rest and fetch(more simple). 
+For example, Trivial Redux contains some types of endpoints - rest, fetch and setter. 
 All endpoints are considered as rest by default, but it can be changed:
 
 ```javascript
