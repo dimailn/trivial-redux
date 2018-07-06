@@ -1,6 +1,6 @@
 # trivial-redux 
 [![Build Status](https://travis-ci.org/dimailn/trivial-redux.svg?branch=master)](https://travis-ci.org/dimailn/trivial-redux)
-
+[![Coverage Status](https://coveralls.io/repos/github/dimailn/trivial-redux/badge.svg?branch=coveralls)](https://coveralls.io/github/dimailn/trivial-redux?branch=coveralls)
 
 Trivial Redux is the library for fast creating API layer that gives you trivial CRUD from the box.
 It generates actions and reducers for standard REST queries. 
