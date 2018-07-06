@@ -15,7 +15,8 @@
   "devDependencies": {
     "babel-jest": "^21.0.2",
     "coffee-script": "^1.12.6",
-    "jest": "^21.1.0"
+    "coveralls": "^3.0.2",
+    "jest": "^21.2.1"
   },
   "jest": {
     "moduleFileExtensions": [
