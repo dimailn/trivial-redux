@@ -267,6 +267,7 @@ The host for url prefix
 
 
 ## Roadmap
+* Requests(actions without affect store)
 * Immutable reducers
 * Custom actions
 * Aliases
