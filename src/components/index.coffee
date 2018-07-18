@@ -4,6 +4,7 @@ components =
   actions: require './actions'
   types: require './types'
   reducers: require './reducers'
+  requests: require './requests'
 
 module.exports.components = components
 
