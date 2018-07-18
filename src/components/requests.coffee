@@ -13,9 +13,13 @@ module.exports = (args...) ->
         action
       else
         (dispatch, getState) ->
-          action = action(dispatch, getState)
-          cloneDeep(action)
-          action.isRequest = true
-          action
+          wrappedDispatch = (dispatchedAction) ->
+            return dispatch(dispatchedAction) unless dispatchedAction.types?
+
+            dispatchedAction = cloneDeep(dispatchedAction)
+            dispatchedAction.isRequest = true
+            dispatch(dispatchedAction)
+
+          action(wrappedDispatch, getState)
 
   _actions
