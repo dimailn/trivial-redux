@@ -11,13 +11,12 @@ applyExtra = (actions, extra) ->
             dispatchWrapper = (a) -> dispatch(_.merge(_.cloneDeep(a), extra))
             action(dispatchWrapper, getState, extraArgument)
         else
-          {types} = action
-          action = _.pickBy(action, (value, key) -> key isnt 'types')
-          action = _.merge(_.cloneDeep(action), extra)
-          action.types = types if types?
-          action
+          _.merge(_.cloneDeep(action), extra)
+
 
   actionsWithExtra
 
 module.exports = (name, endpoint, api) ->
-  api.actions[name] = applyExtra(api.actions[name], endpoint.extra) if endpoint.extra
+  if endpoint.extra
+    api.actions[name] = applyExtra(api.actions[name], endpoint.extra)
+    api.requests[name] = applyExtra(api.requests[name], endpoint.extra)
