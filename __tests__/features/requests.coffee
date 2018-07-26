@@ -30,4 +30,15 @@ describe "Requests", ->
     expect(dispatch).toBeCalled()
 
 
+  test "with extra", ->
+    api = trivialRedux({todos: 'todos'}, {
+      extra:
+        camelizeKeys: true
+    })
+
+    action = api.requests.todos.index()
+
+    expect(action.camelizeKeys).toBe true
+
+
 
