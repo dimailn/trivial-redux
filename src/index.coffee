@@ -1,4 +1,4 @@
-{components, createApi} = require './components'
+{components, createApi}  = require './components'
 plugins                  = require './plugins'
 typeFrom                 = require './utils/type_from'
 defaultEndpointFor       = require './default_endpoint'
@@ -37,13 +37,18 @@ trivialRedux = (endpoints, settings = {}) ->
     customType = customTypes[type]
 
     if customType?
-      api.types[name]    =  createActionTypes(name, customType)
-      api.reducers[name] =  createReducer(name, customType.reducer, endpoint, api.types)
+      customType.reducer.defaultState = customType.initialState if customType.hasOwnProperty('initialState')
+
+      actions = customType.actions?(name, endpoint, settings) || {}
+      asyncActions = customType.asyncActions?(name, endpoint, settings) || {}
       api.actions[name]  =  Object.assign(
         {}
-        customType.actions?(name, endpoint, settings) || {}
-        customType.asyncActions?(name, endpoint, settings) || {}
+        actions
+        asyncActions
       )
+
+      api.types[name]    =  createActionTypes(name, actions, asyncActions)
+      api.reducers[name] =  createReducer(name, customType.reducer, endpoint, api.types)
     else
       Object.keys(components).forEach (component) ->
         api[component][name] = components[component](name, endpoint, settings, api, type)

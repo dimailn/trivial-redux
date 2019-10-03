@@ -7,7 +7,7 @@ defaultState   = require '../../src/states/setter'
 customSetter = {
   name: 'custom-setter'
   initialState: null
-  reducer: (entityName, initialState) -> (state = initialState, action) ->
+  reducer: (entityName, initialState) ->
     (state = initialState, action) ->
       switch action.type
         when @types.set
