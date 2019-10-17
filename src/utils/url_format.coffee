@@ -1,5 +1,11 @@
 mutators = [
-  (settings, url) -> if settings.skipFormat then url else url + '.json'
+  (settings, url) ->
+    return url if settings.skipFormat
+
+    if url[url.length - 1] == '/'
+      url[0...-1] + '.json'
+    else
+      url + '.json'
   (settings, url) ->
     {host} = settings
     if host && url[0] is '~'
