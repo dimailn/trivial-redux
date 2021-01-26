@@ -19,6 +19,7 @@ There are some tasks that don't fit the pattern and it is easier to solve them w
 - [The endpoint state structure](#the-endpoint-state-structure)
 - [Actions description](#actions-description)
 - [Configuration object](#configuration-object)
+- [Custom async types generator](#custom-async-types-generator)
 - [Roadmap](#roadmap)
   
 
@@ -265,6 +266,16 @@ The array of reducer decorators. Decorator is a function which takes reducer and
 #### host
 The host for url prefix
 
+## Custom async types generator
+
+There are some helpers in trivial redux for getting types: 
+
+* ```api.typesFor```
+* reducer's ```this.typesFor```
+* reducer's ```this.types```
+* reducer's ```this.allTypes```
+
+These helpers are bound to trivial-redux instance settings. There is also the helper ```actionTypesFor``` from trivial-redux package. This helper is not bound to trivial-redux instance settings and may be incompatible with with the above helpers. 
 
 ## Roadmap
 * Requests(actions without affect store)
