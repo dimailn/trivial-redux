@@ -31,10 +31,6 @@ trivialRedux = (endpoints, settings = {}) ->
 module.exports = trivialRedux
 
 
-module.exports.actionTypesFor = (args...) ->
-  console.warn(
-    "[trivial-redux] actionTypesFor helper is deprecated and will be removed in next major version. Use this.allTypes in the reducers or api.typesFor otherwise instead."
-  )
-  actionTypesFor(args...)
+module.exports.actionTypesFor = (args...) -> actionTypesFor(args...)
 
 module.exports.defaultStates  = require './states'
