@@ -6,6 +6,7 @@ defaultEndpointFor       = require './default_endpoint'
 actionTypesFor           = require './action_types'
 createReducer            = require './utils/create_reducer'
 createActionTypes        = require './utils/create_action_types_from_custom_type'
+prepareActions           = require './utils/prepare_actions'
 
 trivialRedux = (endpoints, settings = {}) ->
   api = createApi()
@@ -13,7 +14,7 @@ trivialRedux = (endpoints, settings = {}) ->
   settings.types ||= []
 
   customTypes = settings.types.reduce(
-    (obj, type) -> 
+    (obj, type) ->
       throw "[trivial-redux] Name for custom endpoint type is required" unless type.name
       obj[type.name] = type
       obj
@@ -41,13 +42,17 @@ trivialRedux = (endpoints, settings = {}) ->
 
       actions = customType.actions?(name, endpoint, settings) || {}
       asyncActions = customType.asyncActions?(name, endpoint, settings) || {}
-      api.actions[name]  =  Object.assign(
-        {}
-        actions
-        asyncActions
-      )
 
       api.types[name]    =  createActionTypes(name, actions, asyncActions)
+
+
+
+      api.actions[name]  =  Object.assign(
+        {}
+        prepareActions(actions, api.types[name])
+        prepareActions(asyncActions, api.types[name])
+      )
+
       api.reducers[name] =  createReducer(name, customType.reducer, endpoint, api.types)
     else
       Object.keys(components).forEach (component) ->
