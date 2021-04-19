@@ -20,6 +20,7 @@ There are some tasks that don't fit the pattern and it is easier to solve them w
 - [Actions description](#actions-description)
 - [Configuration object](#configuration-object)
 - [Custom async types generator](#custom-async-types-generator)
+- [Custom types](#custom-types)
 - [Roadmap](#roadmap)
   
 
