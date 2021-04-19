@@ -5,12 +5,7 @@ urlFormat      = require '../utils/url_format'
 module.exports = (entity_name, endpoint, settings) ->
   format = urlFormat(settings)
 
-  fetch: (idOrData, data) ->
-    if idOrData instanceof Object
-      data = idOrData
-    else
-      id = idOrData
-
+  fetch: ({id, data}) ->
     types: actionTypesFor('fetch', entity_name)
     meta:
       fetch:

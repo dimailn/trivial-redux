@@ -1,6 +1,6 @@
-actionTypesFor = require '../action_types'
-actionTypeFor  = require '../action_type'
-urlFormat      = require '../utils/url_format'
+actionTypesFor = require '../../action_types'
+actionTypeFor  = require '../../action_type'
+urlFormat      = require '../../utils/url_format'
 
 module.exports = (entity_name, endpoint, settings) ->
   format = urlFormat(settings)

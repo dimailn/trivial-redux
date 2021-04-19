@@ -1,4 +1,4 @@
-actionTypeFor  = require '../action_type'
+actionTypeFor  = require '../../action_type'
 
 module.exports = (entity_name, endpoint, settings) ->
   set: (data) ->
