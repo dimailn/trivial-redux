@@ -277,6 +277,76 @@ There are some helpers in trivial redux for getting types:
 
 These helpers are bound to trivial-redux instance settings. There is also the helper ```actionTypesFor``` from trivial-redux package. This helper is not bound to trivial-redux instance settings and may be incompatible with with the above helpers. 
 
+
+## Custom types
+
+Besides the built-in types you may use your own types. Define you type like below:
+
+```javascript
+
+export default {
+  name: 'custom-setter',
+  initialState: null,
+  reducer(entityName, initialState) {
+    return function(state = initialState, action) {
+      switch(action.type) {
+        case this.types.set
+          return action.payload
+        case this.types.reset
+          return cloneDeep(initialState)
+        else
+          return state
+      }
+    }
+  },
+  actions(entityName, endpoint, settings) {
+    return {
+      set(data) {
+        return {payload: data}
+      }
+      reset(){
+        return {}
+      }
+    }
+  }
+      
+  asyncActions(entityName, endpoint, settings) {
+    return {
+      load() {
+        return {
+          meta: {
+            fetch: {
+              url: '...'
+            }
+          }
+        }
+      } 
+  }
+}
+
+```
+
+Action types will be generated based on action name and type(sync/async). You may also specify your type explicit.
+
+After you may use your type in schema as following:
+
+```javascript
+
+export default trivialRedux(
+  {
+    todo:
+      type: 'custom-setter'
+  },
+  {
+    types: [
+      CustomSetter
+    ]
+  }
+)
+
+```
+
+
 ## Roadmap
 * Requests(actions without affect store)
 * Immutable reducers
