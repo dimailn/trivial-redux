@@ -18,11 +18,11 @@ customSetter = {
           state
   actions: (entityName, endpoint, settings) ->
     set: (data) ->
-      type: actionTypeFor('set', entityName)
       payload: data
 
     reset: ->
-      type: actionTypeFor('reset', entityName)
+      {}
+
 }
 
 endpoints = {
