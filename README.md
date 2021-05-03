@@ -349,7 +349,6 @@ export default trivialRedux(
 
 
 ## Roadmap
-* Requests(actions without affect store)
 * Immutable reducers
 * Custom actions
 * Aliases
