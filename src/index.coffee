@@ -37,6 +37,7 @@ trivialRedux = (endpoints, settings = {}) ->
 
     customType = customTypes[type]
 
+
     if customType?
       customType.reducer.defaultState = customType.initialState if customType.hasOwnProperty('initialState')
 
@@ -44,8 +45,6 @@ trivialRedux = (endpoints, settings = {}) ->
       asyncActions = customType.asyncActions?(name, endpoint, settings) || {}
 
       api.types[name]    =  createActionTypes(name, actions, asyncActions)
-
-
 
       api.actions[name]  =  Object.assign(
         {}
@@ -56,7 +55,10 @@ trivialRedux = (endpoints, settings = {}) ->
       api.reducers[name] =  createReducer(name, customType.reducer, endpoint, api.types)
     else
       Object.keys(components).forEach (component) ->
+        return if ['reducers', 'actions'].includes(component) && endpoint.stateless
+
         api[component][name] = components[component](name, endpoint, settings, api, type)
+
 
     plugins.forEach (plugin) -> plugin(name, endpoint, api)
 
