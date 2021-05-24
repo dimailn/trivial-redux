@@ -1,9 +1,12 @@
 createReducerContext = require './create_reducer_context'
 {produce} = require 'immer'
 
+
 applyImmer = (reducer) -> (state, action) ->
   produce(state, (draftState) ->
     reducer(draftState, action)
+
+    return
   )
 
 module.exports = (entityName, reducerFactory, endpoint, allTypes) ->
