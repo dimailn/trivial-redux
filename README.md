@@ -350,7 +350,7 @@ export default trivialRedux(
 
 ## Immutability
 
-Trivial redux uses Immer to provide immutable reducers. You may pass ```immer: true``` in global settings(or for current endpoint), and your reducers will work in immutable way, no other changes needed.
+Trivial redux uses Immer to provide immutable reducers. You may pass ```immer: true``` in global settings(or for current endpoint), and your reducers will work in immutable way, no other changes is needed.
 
 
 ## Roadmap
