@@ -21,6 +21,7 @@ There are some tasks that don't fit the pattern and it is easier to solve them w
 - [Configuration object](#configuration-object)
 - [Custom async types generator](#custom-async-types-generator)
 - [Custom types](#custom-types)
+- [Immutability](#immutability)
 - [Roadmap](#roadmap)
   
 
@@ -347,9 +348,12 @@ export default trivialRedux(
 
 ```
 
+## Immutability
+
+Trivial redux uses Immer to provide immutable reducers. You may pass ```immer: true``` in global settings(or for current endpoint), and your reducers will work in immutable way, no other changes needed.
+
 
 ## Roadmap
-* Immutable reducers
 * Custom actions
 * Aliases
 * Extended decorators
