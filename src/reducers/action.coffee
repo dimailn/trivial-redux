@@ -6,15 +6,20 @@ createActionReducerFor = (entity_name, initialState) ->
   (state = initialState, action) ->
     switch action.type
       when @types.execute.load
-        Object.assign({}, state, pending: true)
+        state.pending = true
       when @types.execute.success
-        lastExecutedAt: new Date().getTime(), data: action.payload, pending: false
+        state.lastExecutedAt = new Date().getTime()
+        state.data = action.payload
+        state.pending = false
       when @types.execute.failure
-        Object.assign({}, state, data: action.payload, pending: false)
+        state.data = action.payload
+        state.pending = false
       when @types.reset
-        Object.assign({}, state, initialState)
+        Object.keys(initialState).forEach((key) => state[key] = initialState[key])
       else
-        state
+        return state
+
+    return
 
 createActionReducerFor.defaultState = defaultState
 

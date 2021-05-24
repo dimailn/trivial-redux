@@ -5,8 +5,6 @@ createReducerContext = require './create_reducer_context'
 applyImmer = (reducer) -> (state, action) ->
   produce(state, (draftState) ->
     reducer(draftState, action)
-
-    return
   )
 
 module.exports = (entityName, reducerFactory, endpoint, allTypes) ->
@@ -16,14 +14,17 @@ module.exports = (entityName, reducerFactory, endpoint, allTypes) ->
   reducer = reducerFactory(entityName, initialState || reducerFactory.defaultState)
   reducer = reducer.bind(innerContext)
 
-  # Если не задан кастомный редьюсер - возвращаем стандартный
-  return reducer unless customReducer?
+  # return standard reducer if we have no custom reducer
+  return applyImmer(reducer) unless customReducer?
 
-  # Прикрепляем контекст
+  # if custom reducer doesn't use immer we should apply immer to provide plain objects
+  reducer = applyImmer(reducer) unless immer
+
+  # Attach context
   context = createReducerContext(entityName, allTypes, reducer)
   customReducer = customReducer.bind(context)
 
-  # Применяем декораторы
+  # Apply decorators
   customReducer = decorators.reduce(
     (reducer, decorator) -> decorator(reducer).bind(context)
     customReducer

@@ -6,16 +6,20 @@ createFetchReducerFor = (entity_name, initialState) ->
   (state = initialState, action) ->
     switch action.type
       when @types.fetch.load
-        Object.assign({}, state, fetching: true)
+        state.fetching = true
       when @types.fetch.success
-        lastUpdatedAt: new Date().getTime(), data: action.payload, fetching: false
+        state.lastUpdatedAt = new Date().getTime()
+        state.data = action.payload
+        state.fetching = false
       when @types.fetch.failure
-        Object.assign({}, state, data: action.payload, fetching: false)
+        state.data = action.payload
+        state.fetching = false
       when @types.reset
-        Object.assign({}, state, initialState)
+        Object.keys(initialState).forEach((key) => state[key] = initialState[key])
       else
-        state
+        return state
 
+    return
 createFetchReducerFor.defaultState = defaultState
 
 module.exports = createFetchReducerFor

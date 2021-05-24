@@ -25,6 +25,8 @@ describe 'Immer mode', ->
           switch action.type
             when @types.index.load
               state.fetching = true
+
+          return
     )
 
 

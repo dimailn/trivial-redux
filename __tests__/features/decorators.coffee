@@ -12,7 +12,7 @@ api = trivialRedux(
     decorators: [AuthDecorator]
     reducer: (state, action) ->
       if @types.index.failure
-        Object.assign(this.reducer(state, action), anotherData: 'Some error')
+        Object.assign({}, this.reducer(state, action), anotherData: 'Some error')
       else
         @reducer(state, action)
 )

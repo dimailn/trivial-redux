@@ -6,67 +6,57 @@ defaultState   = require '../states/rest'
 handleNextPage = (state, action, types) ->
   switch action.type
     when types.load
-      Object.assign({}, state, fetching: true)
+      state.fetching = true
     when types.success
-      Object.assign(
-        {}
-        state
-        fetching: false
-        nextPage: if state.nextPage then state.nextPage + 1 else 2
-        data: Object.assign({}, state.data, collection: state.data.collection.concat(action.payload))
-      )
+      state.fetching = false
+      state.nextPage = if state.nextPage then state.nextPage + 1 else 2
+      state.data.collection = state.data.collection.concat(action.payload)
     when types.failure
-      Object.assign({}, state, fetching: false, error: action.response)
+      state.fetching = false
+      state.error = action.response
+
 
 createRestReducerFor = (entity_name, initialState) ->
   (state = initialState, action) ->
     switch action.type
       # index
       when @types.index.load
-        Object.assign({}, state, fetching: true)
+        state.fetching = true
       when @types.index.success
-        lastUpdatedAt: new Date().getTime()
-        data: Object.assign({}, state.data, collection: action.payload)
-        fetching: false
-        error: null
+        state.lastUpdatedAt = new Date().getTime()
+        state.data.collection = action.payload
+        state.fetching = false
+        state.error = null
       when @types.index.failure
-        Object.assign({}, state, fetching: false, error: action.response)
+        state.fetching = false
+        state.error = action.response
       # show
       when @types.show.load
-        Object.assign({}, state, fetching: true)
+        state.fetching = true
       when @types.show.success
-        Object.assign(
-          {}
-          state
-          {
-            data: Object.assign({}, state.data, current: action.payload)
-            fetching: false
-          }
-        )
+        state.data.current = action.payload
+        state.fetching = false
       when @types.show.failure
-        Object.assign({}, state, fetching: false, error: action.response)
+        state.fetching = false
+        state.error = action.response
       # reset
       when @types.reset
-        Object.assign({}, initialState)
+        Object.keys(initialState).forEach((key) => state[key] = initialState[key])
       # nextPage
       when @types.nextPage.load, @types.nextPage.success, @types.nextPage.failure
-        return state unless action.meta.page == state.nextPage || !state.nextPage?
-        handleNextPage.bind(@)(state, action, @types.nextPage)
+        if action.meta.page == state.nextPage || !state.nextPage?
+          handleNextPage.bind(@)(state, action, @types.nextPage)
       when @types.update.success
-        Object.assign(
-          {},
-          state,
-          {
-            data: {
-              collection: state.data.collection.map (entity) -> if entity.id == action.payload.id then action.payload else entity
-              oldCurrent: null
-              current: null
-            }
-            fetching: false
-          }
-        )
+        state.fetching = false
+        state.data = {
+          collection: state.data.collection.map (entity) -> if entity.id == action.payload.id then action.payload else entity
+          oldCurrent: null
+          current: null
+        }
       else
-        state
+        return state
+
+    return
 
 createRestReducerFor.defaultState = defaultState
 
