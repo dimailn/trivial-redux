@@ -10,10 +10,10 @@ api = trivialRedux(
 )
 
 describe 'Immer mode', ->
-  test "we ignore return value", ->
+  test "internal reducers works the same", ->
     state = Object.assign({}, defaultStates.rest)
     state = api.reducers.todos(state, type: api.types.todos.index.load, payload: [])
-    expect(state.fetching).toBe false
+    expect(state.fetching).toBe true
 
   test "mutation produces new object", ->
     api = trivialRedux(
@@ -28,6 +28,7 @@ describe 'Immer mode', ->
     )
 
 
-    state = Object.assign({}, defaultStates.rest)
-    state = api.reducers.todos(state, type: api.types.todos.index.load, payload: [])
+    firstState = Object.assign({}, defaultStates.rest)
+    state = api.reducers.todos(firstState, type: api.types.todos.index.load, payload: [])
     expect(state.fetching).toBe true
+    expect(firstState != state).toBe true

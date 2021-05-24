@@ -16,8 +16,6 @@ module.exports = (entityName, reducerFactory, endpoint, allTypes) ->
   reducer = reducerFactory(entityName, initialState || reducerFactory.defaultState)
   reducer = reducer.bind(innerContext)
 
-  reducer = applyImmer(reducer) if immer
-
   # Если не задан кастомный редьюсер - возвращаем стандартный
   return reducer unless customReducer?
 
