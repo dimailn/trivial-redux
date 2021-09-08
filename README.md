@@ -289,6 +289,8 @@ Besides the built-in types you may use your own types. Define you type like belo
 export default {
   name: 'custom-setter',
   initialState: null,
+  // all reducers of types works on immer
+  // It means you should mutate state here or return new state(not both)
   reducer(entityName, initialState) {
     return function(state = initialState, action) {
       switch(action.type) {
