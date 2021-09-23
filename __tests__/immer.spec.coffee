@@ -25,6 +25,7 @@ describe 'Immer mode', ->
           switch action.type
             when @types.index.load
               state.fetching = true
+              state.newKey = true
 
           return
     )
@@ -33,4 +34,25 @@ describe 'Immer mode', ->
     firstState = Object.assign({}, defaultStates.rest)
     state = api.reducers.todos(firstState, type: api.types.todos.index.load, payload: [])
     expect(state.fetching).toBe true
+    expect(state.newKey).toBe true
+    expect(firstState != state).toBe true
+
+  test "return new state", ->
+    api = trivialRedux(
+      todos:
+        entry:'http://www.somesite.somedomain/todos'
+        type: 'rest'
+        reducer: (state, action) ->
+          switch action.type
+            when @types.index.load
+              Object.assign({}, state, fetching: true, newKey: true)
+            else
+              state
+    )
+
+
+    firstState = Object.assign({}, defaultStates.rest)
+    state = api.reducers.todos(firstState, type: api.types.todos.index.load, payload: [])
+    expect(state.fetching).toBe true
+    expect(state.newKey).toBe true
     expect(firstState != state).toBe true
