@@ -152,7 +152,7 @@ Sometimes you have common logic for the reducers(pagination, for example). In th
 
 ```javascript
 
-// define you decorator
+// define your decorator
 const PaginationDecorator = function(reducer){
   return function(state, action){
     // here you have access to this.types, etc
