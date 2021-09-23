@@ -165,6 +165,8 @@ const PaginationDecorator = function(reducer){
   }
 }
 
+// if you use immer in decorator - PaginationDecorator.immer = true
+
 // and use it in endpoint config
 
 trivialRedux(
