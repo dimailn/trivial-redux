@@ -20,7 +20,7 @@ interface RestAC {
 }
 
 
-interface Rest {
+interface Rest extends Record<string, (...args: any) => any> {
     index: (a: string, b: number) => RestAC
     // create: () => Promise<T>
     // show: () => Promise<T>
@@ -30,7 +30,7 @@ interface Rest {
 }
 
 type RestWrapped<T> = {
-    [Action in keyof Rest]: () => Promise<T>
+    [Action in keyof Rest]: (...args: Parameters<Rest[Action]>) => Promise<T>
 }
 
 interface RestAPI<T> {
@@ -187,12 +187,40 @@ type EntityApi<T extends EntitityName> = {
         [Property in keyof SchemaType[T]['actions']]: (...args: Parameters<SchemaType[T]['actions'][Property]>) => Promise<ExtractEntity<SchemaType[T]>>
     },
     requests: {
-        [Property in keyof SchemaType[T]['requests']]: () => Promise<ExtractEntity<SchemaType[T]>>
+        [Property in keyof SchemaType[T]['actions']]: (...args: Parameters<SchemaType[T]['requests'][Property]>) => Promise<ExtractEntity<SchemaType[T]>>
+    }
+}
+
+// type WrappedApi = {
+//     [Property in keyof SchemaType]: EntityApi<Property>
+// }
+
+
+
+type WrappedActions = {
+    -readonly[EndpointName in keyof Api['actions']]: {
+        [ActionName in keyof Api['actions'][EndpointName]]: (...args: Parameters<Api['actions'][EndpointName][ActionName]>) => Promise<ReturnType<Api['actions'][EndpointName][ActionName]>>
+    }
+}
+
+type WrappedRequests = {
+    -readonly[EndpointName in keyof Api['requests']]: {
+        [ActionName in keyof Api['requests'][EndpointName]]: (...args: Parameters<Api['requests'][EndpointName][ActionName]>) => Promise<ReturnType<Api['requests'][EndpointName][ActionName]>>
     }
 }
 
 
+type WrappedApi = {
+    [ComponentName in keyof Api]: {
+        [EndpointName in keyof Api[ComponentName]]: {
+            [ActionName in keyof Api[ComponentName][EndpointName]]: (...args: Parameters<Api[ComponentName][EndpointName][ActionName]>) => Promise<ReturnType<Api[ComponentName][EndpointName][ActionName]>>
+        }
+    }
+}
+
 let x : EntityApi<"products">
+
+
 
 // x.actions.index("", 2)
 
@@ -204,21 +232,56 @@ let x : EntityApi<"products">
 type ComponentName = 'actions' | 'requests' | 'reducers'
 type ComponentNameWithoutReducers = 'actions' | 'requests' 
 
+declare global {
+    interface ObjectConstructor {
+        typedKeys<T>(obj: T): Array<keyof T>
+    }
+}
+const typedKeys : <T>(obj: T) => Array<keyof T> = Object.keys as any
 
-// function useApi(name: EntitityName) : Api {
-    // const store = useStore()
+
+function useApi() : WrappedApi {
+    const store = useStore()
+
+    const api: Api // from context
+
 
 
     // const wrap = function<T>(restEndpoint: RestEndpoint<T>, name: ComponentNameWithoutReducers) : RestWrapped<T> {
     //     return {
-    //         index: () => store.dispatch(restEndpoint[name].index()) as any as Promise<T>
+    //         index: (...args) => store.dispatch(restEndpoint[name].index(...args)) as any as Promise<T>
     //     }
     // }
 
-    // return {
-    //     actions: {products: wrap(trivialReduxDescriptor[name], "actions")},
-    //     // requests: wrap(trivialReduxDescriptor[name], "requests")
-    // }
+
+    const wrap = function<T>(componentName: ComponentNameWithoutReducers, entityName: EntitityName) : RestWrapped<T> {
+        return {
+            index: (...args) => store.dispatch(api[componentName][entityName].index(...args)) as any as Promise<T>
+        }
+    }
+
+
+    const actions = typedKeys(api.actions).reduce((actions, entityName) => {
+        actions[entityName] = wrap('actions', entityName)
+        
+        return actions
+    }, {} as WrappedActions)
+
+
+    const requests = typedKeys(api.requests).reduce((requests, entityName) => {
+        requests[entityName] = wrap('requests', entityName)
+
+        return requests
+    }, {} as WrappedRequests)
+    
+
+
+    return {
+        actions,
+        requests
+        // actions: {products: wrap(trivialReduxDescriptor[name], "actions")},
+        // requests: wrap(trivialReduxDescriptor[name], "requests")
+    }
 
     // const actions = wrap(trivialReduxDescriptor.products, "actions")
     // const requests = wrap(trivialReduxDescriptor.products, 'requests')
@@ -244,7 +307,7 @@ type ComponentNameWithoutReducers = 'actions' | 'requests'
     //     actions: wrapComponent("actions"),
     //     requests: wrapComponent("requests")
     // }
-// }
+}
 
 
 
@@ -264,32 +327,66 @@ type ComponentNameWithoutReducers = 'actions' | 'requests'
 // }
 // type A = typeof a
 
+type Methods = Record<string, (...args: any) => any>
+
+const a: Methods = {
+    b: (a: string) => Promise.resolve(),
+    a: (a: string) => 1
+}
+
 type A = {
-    a: {
-        b: (a: string) => Promise<void>
+    a: Methods
+}
+
+type B = {
+    [FirstLevelProperty in keyof A]: {
+        [SecondLevelProperty in keyof A[FirstLevelProperty]]: (...args: Parameters<A[FirstLevelProperty][SecondLevelProperty]>) => Promise<void>
     }
 }
 
-type KeysOfA = keyof A
+// type B = {
+//     [FirstLevelProperty in keyof A]: {
+//         [SecondLevelProperty in keyof A[FirstLevelProperty]]: A[FirstLevelProperty][SecondLevelProperty]
+//     }
+// }
 
-type B<T extends KeysOfA> = {
-    [Property in keyof A[T]]: (...args: Parameters<A[T][Property]>) => void
-}
 
-const b : B<"a"> = {
-    b: (a: string) => {}
-}
 
+
+
+// type KeysOfA = keyof A
+
+// type B<T extends KeysOfA> = {
+//     [Property in Extract<keyof A[T], string>]: (...args: Parameters<A[T][Property]>) => void
+// }
+
+
+
+// const b : B<"a"> = {
+//     b: (a: string) => {}
+// }
 
 // type C<T extends KeysOfA> = {
 //     [Property in keyof A[T]]: A[T][Property]
 // }
 
+// type D<T extends KeysOfA> = {
 
-// type D<T extends C<"a">> = {
-//     [Property in keyof T]: Parameters<T[Property]>
 // }
 
-// const c : C<"a"> = {
+// const c: C<"a"> = {
 //     b: (a: string) => Promise.resolve()
 // }
+
+// // type C<T extends KeysOfA> = {
+// //     [Property in keyof A[T]]: A[T][Property]
+// // }
+
+
+// // type D<T extends C<"a">> = {
+// //     [Property in keyof T]: Parameters<T[Property]>
+// // }
+
+// // const c : C<"a"> = {
+// //     b: (a: string) => Promise.resolve()
+// // }
