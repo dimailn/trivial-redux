@@ -13,3 +13,6 @@ module.exports = (entity_name, endpoint, settings) ->
         method: 'POST'
         data
       }, options)
+      
+  reset: ->
+    type: actionTypeFor('reset', entity_name)
