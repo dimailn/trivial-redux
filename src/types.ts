@@ -1,29 +1,34 @@
-interface TrivialReduxEndpointOptions<S> {
+type ActionsGenerator<T, S, Actions, AsyncActions> = (entityName: string, options: TrivialReduxEndpointOptions<S, Actions, AsyncActions>) => T
+
+
+type TrivialReduxReducer<Actions, AsyncActions, S> = (this: {
+  types: {
+    [K in keyof ReturnType<ActionsGenerator<Actions, S, Actions, AsyncActions>>]: string
+  } & {
+    [K in keyof ReturnType<ActionsGenerator<AsyncActions, S, Actions, AsyncActions>>]: {
+      load: string
+      success: string
+      failure: string
+    }
+  }
+  allTypes: any
+}, state: S, action: any) => S | void
+
+export interface TrivialReduxEndpointOptions<S, Actions, AsyncActions> {
   initialState?: S
-  skipFormat: boolean
-  entry: string
+  skipFormat?: boolean
+  entry?: string
+  reducer?: TrivialReduxReducer<Actions, AsyncActions, S>
 }
 
 
-type ActionsGenerator<T, S> = (entityName: string, options: TrivialReduxEndpointOptions<S>) => T
 
 export interface TrivialReduxType<S, Actions, AsyncActions, Requests, AsyncActionsTypes> {
   name: string
   initialState: S
-  actions: ActionsGenerator<Actions, S>
-  asyncActions: ActionsGenerator<AsyncActions, S>
-  reducer: (entityName: string, initialState: S) => (this: {
-    types: {
-      [K in keyof ReturnType<ActionsGenerator<Actions, S>>]: string
-    } & {
-      [K in keyof ReturnType<ActionsGenerator<AsyncActions, S>>]: {
-        load: string
-        success: string
-        failure: string
-      }
-    }
-    allTypes: any
-  }, state: S, action: any) => S | void,
+  actions: ActionsGenerator<Actions, S, Actions, AsyncActions>
+  asyncActions: ActionsGenerator<AsyncActions, S, Actions, AsyncActions>
+  reducer: (entityName: string, initialState: S) => TrivialReduxReducer<Actions, AsyncActions, S>
   asyncActionsTypes?: AsyncActionsTypes
 }
 

@@ -31,7 +31,9 @@ interface Account {
 
 
 
-const accountFactory = createEndpoint<Account>("account")
+const accountFactory = createEndpoint<Account>("account", {
+  skipFormat: true
+})
 
 
 const account = createApiForType(accountFactory, 'todo', {})
@@ -54,8 +56,10 @@ const useApi = () : WrappedApi<typeof api> => {
   }
 }
 
+(async () => {
+  const {data} = await useApi().requests.account.index()
 
-useApi().requests.account.
+})
 
 
 

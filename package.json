@@ -13,6 +13,7 @@
   },
   "license": "ISC",
   "devDependencies": {
+    "axios": "^0.27.2",
     "babel-jest": "^21.0.2",
     "coffee-script": "^1.12.6",
     "coveralls": "^3.0.2",

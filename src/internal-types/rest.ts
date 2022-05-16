@@ -1,12 +1,13 @@
 import urlFormat from '../utils/url_format'
-import {TrivialReduxType} from '../types'
+import {TrivialReduxEndpointOptions, TrivialReduxType} from '../types'
+import {AxiosResponse} from 'axios'
 
 interface TypeActions<S> {
   reset: () => {type: string}
 }
 
 interface TypeAsyncActions {
-  index: (params) => {
+  index: (params?: any) => {
     types: Array<string>
     meta: {
       fetch: {
@@ -65,7 +66,7 @@ interface TypeAsyncActions {
 }
 
 interface TypeAsyncActionsTypes<T> {
-  index: () => Array<T>
+  index: () => AxiosResponse<Array<T>>
   show: () => T
   update: () => T
   destroy: () => T
@@ -74,9 +75,6 @@ interface TypeAsyncActionsTypes<T> {
 
 type TypeRequests = TypeAsyncActions
 
-interface TrivialReduxEndpointOptions<S> {
-  initialState?: S
-}
 
 interface DefaultInitialState<D> {
   fetching: boolean
@@ -108,7 +106,7 @@ export default <M extends {id: number | string}, S extends DefaultInitialState<M
   entityName: string,
   {
     initialState
-  }: TrivialReduxEndpointOptions<S> = {}
+  }: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
 ) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeRequests, TypeAsyncActionsTypes<M>>=> {
   return {
     name: 'test',
