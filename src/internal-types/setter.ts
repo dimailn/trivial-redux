@@ -1,3 +1,5 @@
+import {TrivialReduxType} from '../types'
+
 interface TypeActions<S> {
   set: (value: S) => {payload: S, type: string}
   reset: () => {type: string}
@@ -16,12 +18,12 @@ interface TrivialReduxEndpointOptions<S> {
   initialState?: S
 }
 
-export default <M, S>(
+export default <S>(
   entityName: string,
   {
     initialState
   }: TrivialReduxEndpointOptions<S> = {}
-) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeRequests, TypeAsyncActionsTypes<M>>=> {
+) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeRequests, TypeAsyncActionsTypes<void>>=> {
   return {
     name: 'test',
     initialState,
@@ -56,9 +58,6 @@ export default <M, S>(
       }
     },
     asyncActions(){
-      return {}
-    },
-    requests(){
       return {}
     }
   }

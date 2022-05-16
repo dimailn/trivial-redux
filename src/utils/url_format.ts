@@ -24,7 +24,7 @@ mutators = [
   }
 ];
 
-module.exports = function(settings) {
+export default function(settings) {
   if (settings == null) {
     settings = {};
   }

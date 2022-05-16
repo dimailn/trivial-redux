@@ -1,3 +1,6 @@
+import urlFormat from '../utils/url_format'
+import {TrivialReduxType} from '../types'
+
 interface TypeActions<S> {
   reset: () => {type: string}
 }
@@ -24,7 +27,13 @@ interface TrivialReduxEndpointOptions<S> {
   initialState?: S
 }
 
-export default <M, S>(
+interface DefaultInitialState<D> {
+  fetching: boolean
+  lastUpdatedAt: number
+  data: D
+}
+
+export default <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
   entityName: string,
   {
     initialState
@@ -48,16 +57,33 @@ export default <M, S>(
           state = initialState;
         }
         switch (action.type) {
-          case this.types.set:
-            return action.payload;
+          case this.types.fetch.load:
+            state.fetching = true;
+            break;
+          case this.types.fetch.success:
+            state.lastUpdatedAt = new Date().getTime();
+            state.data = action.payload;
+            state.fetching = false;
+            break;
+          case this.types.fetch.failure:
+            state.data = action.payload;
+            state.fetching = false;
+            break;
           case this.types.reset:
-            return cloneDeep(initialState)
+            Object.keys(initialState).forEach((function(_this) {
+              return function(key) {
+                return state[key] = initialState[key];
+              };
+            })(this));
+            break;
           default:
-            return state
+            return state;
         }
       }
     },
-    asyncActions(){
+    asyncActions(entityName, options){
+      const format = urlFormat(options)
+
       return {
         fetch: function(idOrData: number | object, data: object) {
           var id;
@@ -70,16 +96,13 @@ export default <M, S>(
             types: actionTypesFor('fetch', entityName),
             meta: {
               fetch: {
-                url: format(id != null ? endpoint + "/" + id : endpoint),
+                url: format(id != null ? entityName + "/" + id : entityName),
                 params: data
               }
             }
           };
         }
       }
-    },
-    requests(){
-      return {}
     }
   }
 }

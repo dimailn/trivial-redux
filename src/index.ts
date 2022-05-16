@@ -17,32 +17,29 @@ import createActionTypes from './utils/create_action_types_from_custom_type'
 
 import prepareActions from './utils/prepare_actions'
 
+import createEndpoint from './internal-types/rest'
 
 
+import {createApiForType, combineEndpoints, Api, WrappedApi} from './types'
 
 
-
-
-
-
-
-const account = createEndpoint<Account>("Account")
-
-// account.reducer()
-
-account.asyncActionsTypes.load
-
-const apiForType = createApiForType(account, 'todo', {})
-
-apiForType.actions.load().payload
-
-
-const endpoints = {
-  todo: apiForType,
-  todo2: apiForType
+interface Account {
+  id: string
+  title: string
 }
 
 
+
+
+const accountFactory = createEndpoint<Account>("account")
+
+
+const account = createApiForType(accountFactory, 'todo', {})
+
+
+const endpoints = {
+  account
+}
 
 
 
@@ -50,19 +47,18 @@ const api : Api<typeof endpoints> = combineEndpoints(endpoints)
 
 
 
-
-
-
-api.actions.todo.load()
-useApi().actions.todo.load()
-
-
-const createGenerator = (settings: TrivialReduxSettings) => {
-
+const useApi = () : WrappedApi<typeof api> => {
   return {
-
+    actions: {},
+    requests: {}
   }
 }
+
+
+useApi().requests.account.
+
+
+
 
 
 
