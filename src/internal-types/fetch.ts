@@ -1,5 +1,7 @@
 import urlFormat from '../utils/url_format'
 import {TrivialReduxType} from '../types'
+import actionTypesFor from '../action_types'
+import actionTypeFor from '../action_type'
 
 interface TypeActions<S> {
   reset: () => {type: string}
@@ -83,6 +85,8 @@ export default <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
     asyncActions(entityName, options){
       const format = urlFormat(options)
 
+      const {entry} = options
+
       return {
         fetch: function(idOrData: number | object, data: object) {
           var id;
@@ -95,7 +99,7 @@ export default <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
             types: actionTypesFor('fetch', entityName),
             meta: {
               fetch: {
-                url: format(id != null ? entityName + "/" + id : entityName),
+                url: format(id != null ? entry + "/" + id : entry),
                 params: data
               }
             }

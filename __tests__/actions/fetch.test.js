@@ -1,17 +1,17 @@
-var actionTypeFor, actionTypesFor, api, trivialRedux;
+const {default: actionTypesFor} = require('../../src/action_types');
 
-trivialRedux = require('../../src/index');
+const {default: actionTypeFor} = require('../../src/action_type');
 
-actionTypesFor = require('../../src/action_types');
 
-actionTypeFor = require('../../src/action_type');
 
-api = trivialRedux({
-  todos: {
+const {combineEndpoints, fetch} = require( '../../src/index')
+
+const api = combineEndpoints({
+  todos: fetch({
     entry: 'http://www.somesite.somedomain/todos',
-    type: 'fetch'
-  }
-});
+  })
+})
+
 
 describe('Fetch actions', function() {
   test('fetch', function() {
@@ -50,18 +50,19 @@ describe('Fetch actions', function() {
     return expect(Object.keys(fetch).length).toBe(2);
   });
   test('fetch with skipFormat', function() {
-    var fetch, ref, ref1, types;
-    api = trivialRedux({
-      todos: {
+    const api = combineEndpoints({
+      todos: fetch({
         entry: 'http://www.somesite.somedomain/todos',
-        type: 'fetch',
         skipFormat: true
-      }
+      })
     });
-    ref = api.actions.todos.fetch(), (ref1 = ref.meta, fetch = ref1.fetch), types = ref.types;
-    expect(fetch.url).toBe('http://www.somesite.somedomain/todos');
-    expect(fetch.params).toBeUndefined();
-    return expect(Object.keys(fetch).length).toBe(2);
+    const action = api.actions.todos.fetch()
+
+    const actionFetch = action.meta.fetch
+
+    expect(actionFetch.url).toBe('http://www.somesite.somedomain/todos');
+    expect(actionFetch.params).toBeUndefined();
+    return expect(Object.keys(actionFetch).length).toBe(2);
   });
   return test('reset', function() {
     return expect(api.actions.todos.reset().type).toBe(actionTypeFor('reset', 'todos'));
