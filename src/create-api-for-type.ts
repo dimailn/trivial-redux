@@ -16,9 +16,6 @@ export default function<S, Actions, AsyncActions, AsyncActionsTypes>(
     ...type.options
   }
 
-
-
-
   const syncActions = type.actions(entityName, options)
   const asyncActions = type.asyncActions(entityName, options)
 

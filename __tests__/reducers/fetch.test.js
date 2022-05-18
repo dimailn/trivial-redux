@@ -1,20 +1,24 @@
 var api, defaultStates, reducers, ref, trivialRedux, types;
 
-trivialRedux = (ref = require('../../src/index'), defaultStates = ref.defaultStates, ref);
+const {combineEndpoints, fetch} = require( '../../src/index')
 
-api = trivialRedux({
-  todos: {
+
+const {default: fetchDefaultState} = require('../../src/states/fetch')
+
+
+api = combineEndpoints({
+  todos: fetch({
     entry: 'http://www.somesite.somedomain/todos',
     type: 'fetch'
-  }
-});
+  })
+})
 
 reducers = api.reducers, types = api.types;
 
 describe('fetch reducer', function() {
   test('fetch pending', function() {
     var state;
-    state = Object.assign({}, defaultStates.fetch);
+    state = Object.assign({}, fetchDefaultState);
     state = reducers.todos(state, {
       type: types.todos.fetch.load
     });
@@ -26,7 +30,7 @@ describe('fetch reducer', function() {
       someData: 'Something',
       another: []
     };
-    state = Object.assign({}, defaultStates.fetch);
+    state = Object.assign({}, fetchDefaultState);
     state = reducers.todos(state, {
       type: types.todos.fetch.success,
       payload: data
@@ -38,7 +42,7 @@ describe('fetch reducer', function() {
   test('fetch failure', function() {
     var error, state;
     error = 'error';
-    state = Object.assign({}, defaultStates.fetch);
+    state = Object.assign({}, fetchDefaultState);
     state = reducers.todos(state, {
       type: types.todos.fetch.failure,
       payload: error
@@ -52,7 +56,7 @@ describe('fetch reducer', function() {
       someData: 'Something',
       another: []
     };
-    state = Object.assign({}, defaultStates.fetch, {
+    state = Object.assign({}, fetchDefaultState, {
       data: data
     });
     return expect(reducers.todos(state, {

@@ -1,25 +1,29 @@
 var api, defaultStates, reducer, ref, trivialRedux;
 
-trivialRedux = (ref = require('../../src/index'), defaultStates = ref.defaultStates, ref);
 
-api = trivialRedux({
-  token: {
-    type: 'setter'
-  }
-});
+const {combineEndpoints, setter} = require( '../../src/index')
+
+
+const {default: setterDefaultState} = require('../../src/states/setter')
+
+
+api = combineEndpoints({
+  token: setter({
+  })
+})
 
 reducer = api.reducers.token;
 
 describe('SETTER reducer', function() {
   test('set', function() {
     var state;
-    state = reducer(defaultStates.setter, api.actions.token.set('SOME_TOKEN'));
+    state = reducer(setterDefaultState, api.actions.token.set('SOME_TOKEN'));
     return expect(state).toBe('SOME_TOKEN');
   });
   test('reset', function() {
     var state;
     state = reducer('SOME_TOKEN', api.actions.token.reset());
-    return expect(state).toBe(defaultStates.setter);
+    return expect(state).toBe(setterDefaultState);
   });
   return test('unknown action', function() {
     var state;

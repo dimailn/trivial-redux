@@ -18,6 +18,7 @@
     "coffee-script": "^1.12.6",
     "coveralls": "^3.0.2",
     "jest": "^28.1.0",
+    "lodash.clonedeep": "^4.5.0",
     "ts-jest": "^28.0.2"
   },
   "jest": {

@@ -1,5 +1,7 @@
 import {TrivialReduxType} from '../types'
-
+import actionTypeFor from '../action_type'
+import defaultState from '../states/setter'
+import cloneDeep from 'lodash.clonedeep'
 interface TypeActions<S> {
   set: (value: S) => {payload: S, type: string}
   reset: () => {type: string}
@@ -21,7 +23,10 @@ interface TrivialReduxEndpointOptions<S> {
 export default <S>(
   options: TrivialReduxEndpointOptions<S> = {}
 ) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<void>>=> {
-  const {initialState} = options
+  let {initialState} = options
+
+  initialState ||= defaultState
+
   return {
     name: 'test',
     initialState,
@@ -30,19 +35,20 @@ export default <S>(
       return {
         set(value: S){
           return {
-            type: actionTypeFor(entityName, 'set'),
+            type: actionTypeFor('set', entityName),
             payload: value
           }
         },
         reset(){
           return {
-            type: actionTypeFor(entityName, 'reset')
+            type: actionTypeFor('reset', entityName)
           }
         }
       }
     },
     reducer(entityName, initialState){
       return function (state, action) {
+
         if (state == null) {
           state = initialState;
         }
@@ -50,7 +56,7 @@ export default <S>(
           case this.types.set:
             return action.payload;
           case this.types.reset:
-            return cloneDeep(initialState)
+            return initialState ? cloneDeep(initialState) : initialState
           default:
             return state
         }

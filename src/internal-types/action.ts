@@ -1,5 +1,8 @@
 import urlFormat from '../utils/url_format'
-import {TrivialReduxType} from '../types'
+import {TrivialReduxType, AsyncActionTypes} from '../types'
+import actionTypesFor from '../action_types'
+import actionTypeFor from '../action_type'
+import defaultState from '../states/action'
 
 interface TypeActions<S> {
   reset: () => {type: string}
@@ -7,7 +10,7 @@ interface TypeActions<S> {
 
 interface TypeAsyncActions {
   execute: (data: object, options: object) => {
-    types: Array<string>
+    types: AsyncActionTypes
     meta: {
       fetch: {
         url: string
@@ -35,7 +38,10 @@ interface DefaultInitialState<D> {
 export default <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
   options: TrivialReduxEndpointOptions<S> = {}
 ) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
-  const {initialState} = options
+  let {initialState} = options
+
+  initialState ||= defaultState as S
+
   return {
     name: 'test',
     initialState,

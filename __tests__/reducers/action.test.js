@@ -1,20 +1,23 @@
-var api, defaultStates, reducers, ref, trivialRedux, types;
+var api, reducers, types;
 
-trivialRedux = (ref = require('../../src/index'), defaultStates = ref.defaultStates, ref);
 
-api = trivialRedux({
-  todos: {
-    entry: 'http://www.somesite.somedomain/todos',
-    type: 'action'
-  }
-});
+const {combineEndpoints, action} = require( '../../src/index')
+
+
+const {default: actionDefaultState} = require('../../src/states/rest')
+
+
+api = combineEndpoints({
+  todos: action({
+    entry: 'http://www.somesite.somedomain/todos'
+})})
 
 reducers = api.reducers, types = api.types;
 
 describe('action reducer', function() {
   test('execute pending', function() {
     var state;
-    state = Object.assign({}, defaultStates.action);
+    state = Object.assign({}, actionDefaultState);
     state = reducers.todos(state, {
       type: types.todos.execute.load
     });
@@ -26,7 +29,7 @@ describe('action reducer', function() {
       someData: 'Something',
       another: []
     };
-    state = Object.assign({}, defaultStates.action);
+    state = Object.assign({}, actionDefaultState);
     state = reducers.todos(state, {
       type: types.todos.execute.success,
       payload: data
@@ -38,7 +41,7 @@ describe('action reducer', function() {
   test('execute failure', function() {
     var error, state;
     error = 'error';
-    state = Object.assign({}, defaultStates.action);
+    state = Object.assign({}, actionDefaultState);
     state = reducers.todos(state, {
       type: types.todos.execute.failure,
       payload: error
@@ -52,7 +55,7 @@ describe('action reducer', function() {
       someData: 'Something',
       another: []
     };
-    state = Object.assign({}, defaultStates.action, {
+    state = Object.assign({}, actionDefaultState, {
       data: data
     });
     return expect(reducers.todos(state, {
