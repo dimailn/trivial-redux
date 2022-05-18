@@ -31,7 +31,7 @@ export default function(entityName, reducerFactory, options, allTypes, types) {
   let customReducer = options.reducer
 
   innerContext = createReducerContext(entityName, {allTypes, types});
-  reducer = reducerFactory(entityName, initialState || reducerFactory.defaultState);
+  reducer = reducerFactory(entityName, initialState);
   reducer = reducer.bind(innerContext);
   reducerWithImmer = applyImmer(reducer);
   context = createReducerContext(entityName, {allTypes, types}, reducerWithImmer);

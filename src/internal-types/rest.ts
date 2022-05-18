@@ -4,6 +4,7 @@ import {AxiosResponse} from 'axios'
 import actionTypesFor from '../action_types'
 import actionTypeFor from '../action_type'
 import {rest as  defaultState} from '../states'
+
 interface TypeActions<S> {
   reset: () => {type: string}
 }
@@ -104,7 +105,9 @@ const handleNextPage = function(state, action, types) {
 const rest = <M extends {id: number | string}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
   options: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
 ) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
-  const {initialState} = options
+  let {initialState} = options
+
+  initialState ||= defaultState as S
 
   return {
     name: 'test',
@@ -130,6 +133,9 @@ const rest = <M extends {id: number | string}, S extends DefaultInitialState<M> 
             break;
           case this.types.index.success:
             state.lastUpdatedAt = new Date().getTime();
+
+            console.log(state)
+
             state.data.collection = action.payload;
             state.fetching = false;
             state.error = null;
@@ -150,6 +156,8 @@ const rest = <M extends {id: number | string}, S extends DefaultInitialState<M> 
             state.error = action.response;
             break;
           case this.types.reset:
+            console.log(initialState)
+
             Object.keys(initialState).forEach((function(_this) {
               return function(key) {
                 return state[key] = initialState[key];
@@ -273,6 +281,5 @@ const rest = <M extends {id: number | string}, S extends DefaultInitialState<M> 
   }
 }
 
-rest.defaultState = defaultState
 
 export default rest

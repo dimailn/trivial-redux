@@ -1,7 +1,7 @@
 const {combineEndpoints, rest} = require( '../../src/index')
 
 
-const restDefaultState = require('../../src/states/rest')
+const {default: restDefaultState} = require('../../src/states/rest')
 
 let api = combineEndpoints({
   todos: rest({
@@ -9,8 +9,6 @@ let api = combineEndpoints({
   })
 });
 
-
-console.log(JSON.stringify(api))
 
 const reducers = api.reducers
 const types = api.types
