@@ -19,13 +19,13 @@ interface TrivialReduxEndpointOptions<S> {
 }
 
 export default <S>(
-  {
-    initialState
-  }: TrivialReduxEndpointOptions<S> = {}
+  options: TrivialReduxEndpointOptions<S> = {}
 ) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<void>>=> {
+  const {initialState} = options
   return {
     name: 'test',
     initialState,
+    options,
     actions(entityName){
       return {
         set(value: S){

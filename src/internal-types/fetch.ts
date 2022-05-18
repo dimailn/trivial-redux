@@ -34,13 +34,13 @@ interface DefaultInitialState<D> {
 }
 
 export default <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
-  {
-    initialState
-  }: TrivialReduxEndpointOptions<S> = {}
+  options: TrivialReduxEndpointOptions<S> = {}
 ) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
+  const {initialState} = options
   return {
     name: 'test',
     initialState,
+    options,
     actions(entityName, endpoint){
       return {
         reset: function() {

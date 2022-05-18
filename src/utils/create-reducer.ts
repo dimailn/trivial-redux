@@ -19,7 +19,7 @@ const applyDecorators = function(reducer, decorators, context) {
   }, reducer);
 };
 
-export default function(entityName, reducerFactory, options, allTypes) {
+export default function(entityName, reducerFactory, options, allTypes, types) {
   var context, innerContext, reducer, reducerWithImmer;
 
   const {
@@ -30,18 +30,18 @@ export default function(entityName, reducerFactory, options, allTypes) {
 
   let customReducer = options.reducer
 
-  innerContext = createReducerContext(entityName, allTypes);
+  innerContext = createReducerContext(entityName, {allTypes, types});
   reducer = reducerFactory(entityName, initialState || reducerFactory.defaultState);
   reducer = reducer.bind(innerContext);
   reducerWithImmer = applyImmer(reducer);
-  context = createReducerContext(entityName, allTypes, reducerWithImmer);
+  context = createReducerContext(entityName, {allTypes, types}, reducerWithImmer);
   if (customReducer == null) {
     return applyDecorators(reducerWithImmer, decorators, context);
   }
   if (!immer) {
     reducer = applyImmer(reducer);
   }
-  context = createReducerContext(entityName, allTypes, reducer);
+  context = createReducerContext(entityName, {allTypes, types}, reducer);
   customReducer = customReducer.bind(context);
   customReducer = applyDecorators(customReducer, decorators, context);
   if (immer) {

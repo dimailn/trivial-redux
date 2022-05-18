@@ -103,12 +103,3 @@ export type WrappedApi<T extends Record<string, any>> = {
 
 
 
-export const useApi = () : WrappedApi<typeof api> => {
-  return {
-    actions: {},
-    requests: {}
-  }
-}
-
-
-

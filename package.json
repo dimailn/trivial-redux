@@ -21,20 +21,34 @@
     "ts-jest": "^28.0.2"
   },
   "jest": {
+    "globals": {
+      "ts-jest": {
+        "exclude": [
+          "**/__mocks__/*"
+        ],
+        "diagnostics": {
+          "exclude": [
+            "**/*.ts",
+            "**/*.test.ts"
+          ]
+        },
+        "tsconfig": {
+          "isolatedModules": true
+        }
+      }
+    },
     "moduleFileExtensions": [
       "js",
       "coffee",
-      "ts"
+      "ts",
+      "js"
     ],
     "transform": {
-      ".*": "./__tests__/preprocessor.js",
-      "^.+\\.tsx$": "ts-jest"
+      "^.+\\.ts$": "ts-jest",
+      "^.+\\.js$": "babel-jest"
     },
     "testMatch": [
-      "**/__tests__/**/*.js(x)",
-      "**/__tests__/**/*.coffee",
-      "*/?(*.)(spec|test).js(x)",
-      "*/?(*.)(spec|test).coffee"
+      "**/__tests__/**/*.test.js"
     ]
   },
   "dependencies": {

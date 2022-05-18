@@ -1,14 +1,16 @@
 import urlFormat from '../utils/url_format'
-import {TrivialReduxEndpointOptions, TrivialReduxType} from '../types'
+import {TrivialReduxEndpointOptions, TrivialReduxType, AsyncActionTypes} from '../types'
 import {AxiosResponse} from 'axios'
-
+import actionTypesFor from '../action_types'
+import actionTypeFor from '../action_type'
+import {rest as  defaultState} from '../states'
 interface TypeActions<S> {
   reset: () => {type: string}
 }
 
 interface TypeAsyncActions {
   index: (params?: any) => {
-    types: Array<string>
+    types: AsyncActionTypes
     meta: {
       fetch: {
         url: string
@@ -17,7 +19,7 @@ interface TypeAsyncActions {
     }
   }
   show: (id: number | string) => {
-    types: Array<string>
+    types: AsyncActionTypes
     meta: {
       fetch: {
         url: string
@@ -25,7 +27,7 @@ interface TypeAsyncActions {
     }
   }
   create: (data) => {
-    types: Array<string>,
+    types: AsyncActionTypes,
     meta: {
       fetch: {
         url: string
@@ -35,7 +37,7 @@ interface TypeAsyncActions {
     }
   }
   update: (id: number | string, data) => {
-    types: Array<string>,
+    types: AsyncActionTypes,
     meta: {
       fetch: {
         url: string
@@ -45,7 +47,7 @@ interface TypeAsyncActions {
     }
   }
   destroy: (id: number | string) => {
-    types: Array<string>
+    types: AsyncActionTypes
     meta: {
       fetch: {
         url: string
@@ -54,7 +56,7 @@ interface TypeAsyncActions {
     }
   }
   nextPage: (params) => (dispatch, getState) => {
-    types: Array<string>
+    types: AsyncActionTypes
     meta: {
       fetch: {
         url: string,
@@ -99,14 +101,15 @@ const handleNextPage = function(state, action, types) {
   }
 };
 
-export default <M extends {id: number | string}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
-  {
-    initialState
-  }: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
+const rest = <M extends {id: number | string}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
+  options: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
 ) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
+  const {initialState} = options
+
   return {
     name: 'test',
     initialState,
+    options,
     actions(entityName){
       return {
         reset: function() {
@@ -269,3 +272,7 @@ export default <M extends {id: number | string}, S extends DefaultInitialState<M
     }
   }
 }
+
+rest.defaultState = defaultState
+
+export default rest
