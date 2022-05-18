@@ -1,6 +1,6 @@
 var slice = [].slice;
 
-module.exports = function(actionCreators, types) {
+export default function(actionCreators, types) {
   var decoratedActionCreators;
   decoratedActionCreators = {};
   Object.keys(actionCreators).forEach(function(name) {

@@ -34,11 +34,10 @@ interface DefaultInitialState<D> {
 }
 
 export default <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
-  entityName: string,
   {
     initialState
   }: TrivialReduxEndpointOptions<S> = {}
-) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeRequests, TypeAsyncActionsTypes<M>>=> {
+) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
   return {
     name: 'test',
     initialState,

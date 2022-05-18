@@ -67,14 +67,11 @@ interface TypeAsyncActions {
 
 interface TypeAsyncActionsTypes<T> {
   index: () => AxiosResponse<Array<T>>
-  show: () => T
-  update: () => T
-  destroy: () => T
-  nextPage: () => Array<T>
+  show: () => AxiosResponse<T>
+  update: () => AxiosResponse<T>
+  destroy: () => AxiosResponse<T>
+  nextPage: () => AxiosResponse<Array<T>>
 }
-
-type TypeRequests = TypeAsyncActions
-
 
 interface DefaultInitialState<D> {
   fetching: boolean
@@ -103,11 +100,10 @@ const handleNextPage = function(state, action, types) {
 };
 
 export default <M extends {id: number | string}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
-  entityName: string,
   {
     initialState
   }: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
-) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeRequests, TypeAsyncActionsTypes<M>>=> {
+) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
   return {
     name: 'test',
     initialState,

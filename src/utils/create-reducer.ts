@@ -1,10 +1,7 @@
-var applyDecorators, applyImmer, createReducerContext, produce;
+import createReducerContext from './create_reducer_context'
+import {produce} from 'immer'
 
-createReducerContext = require('./create_reducer_context');
-
-produce = require('immer').produce;
-
-applyImmer = function(reducer) {
+const applyImmer = function(reducer) {
   return function(state, action) {
     return produce(state, function(draftState) {
       return reducer(draftState, action);
@@ -12,7 +9,7 @@ applyImmer = function(reducer) {
   };
 };
 
-applyDecorators = function(reducer, decorators, context) {
+const applyDecorators = function(reducer, decorators, context) {
   return decorators.reduce(function(reducer, decorator) {
     reducer = decorator(reducer).bind(context);
     if (decorator.immer) {
@@ -22,9 +19,17 @@ applyDecorators = function(reducer, decorators, context) {
   }, reducer);
 };
 
-module.exports = function(entityName, reducerFactory, endpoint, allTypes) {
-  var context, customReducer, decorators, immer, initialState, innerContext, reducer, reducerWithImmer;
-  initialState = endpoint.initialState, customReducer = endpoint.reducer, decorators = endpoint.decorators, immer = endpoint.immer;
+export default function(entityName, reducerFactory, options, allTypes) {
+  var context, innerContext, reducer, reducerWithImmer;
+
+  const {
+    initialState,
+    decorators,
+    immer
+  } = options
+
+  let customReducer = options.reducer
+
   innerContext = createReducerContext(entityName, allTypes);
   reducer = reducerFactory(entityName, initialState || reducerFactory.defaultState);
   reducer = reducer.bind(innerContext);

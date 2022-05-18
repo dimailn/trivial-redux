@@ -1,10 +1,8 @@
-var actionTypeFor, actionTypesFor, createActionTypes;
+import actionTypesFor from '../action_types'
 
-actionTypesFor = require('../action_types');
+import actionTypeFor from '../action_type'
 
-actionTypeFor = require('../action_type');
-
-createActionTypes = function(entityName, actions, asyncActions) {
+export default function(entityName, actions, asyncActions) {
   var ac, actionTypes, name;
   actionTypes = {};
   for (name in asyncActions) {
@@ -17,5 +15,3 @@ createActionTypes = function(entityName, actions, asyncActions) {
   }
   return actionTypes;
 };
-
-module.exports = createActionTypes;

@@ -1,8 +1,6 @@
-var createActionTypes, createReducerContext;
+import createActionTypes from './create_action_types'
 
-createActionTypes = require('./create_action_types');
-
-createReducerContext = function(entityName, allTypes, reducer) {
+const createReducerContext = function(entityName, allTypes, reducer = null) {
   var context;
   context = {
     types: allTypes[entityName],
@@ -12,4 +10,4 @@ createReducerContext = function(entityName, allTypes, reducer) {
   return Object.freeze(context);
 };
 
-module.exports = createReducerContext;
+export default createReducerContext

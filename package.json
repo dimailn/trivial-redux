@@ -14,18 +14,21 @@
   "license": "ISC",
   "devDependencies": {
     "axios": "^0.27.2",
-    "babel-jest": "^21.0.2",
+    "babel-jest": "^28.1.0",
     "coffee-script": "^1.12.6",
     "coveralls": "^3.0.2",
-    "jest": "^21.2.1"
+    "jest": "^28.1.0",
+    "ts-jest": "^28.0.2"
   },
   "jest": {
     "moduleFileExtensions": [
       "js",
-      "coffee"
+      "coffee",
+      "ts"
     ],
     "transform": {
-      ".*": "./__tests__/preprocessor.js"
+      ".*": "./__tests__/preprocessor.js",
+      "^.+\\.tsx$": "ts-jest"
     },
     "testMatch": [
       "**/__tests__/**/*.js(x)",

@@ -1,6 +1,4 @@
-var actionTypesFor;
-
-actionTypesFor = function(action_name, entity_name) {
+export default function(action_name, entity_name) {
   return {
     load: action_name + "/" + entity_name + "/PENDING",
     success: action_name + "/" + entity_name + "/SUCCESS",
@@ -8,4 +6,3 @@ actionTypesFor = function(action_name, entity_name) {
   };
 };
 
-module.exports = actionTypesFor;
