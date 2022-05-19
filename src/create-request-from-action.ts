@@ -1,3 +1,5 @@
+const cloneDeep = require('lodash.clonedeep')
+
 export default (action) => {
   if (typeof action === 'object') {
     action = cloneDeep(action);

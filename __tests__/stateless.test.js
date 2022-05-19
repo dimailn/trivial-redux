@@ -1,17 +1,11 @@
-var actionTypeFor, actionTypesFor, api, trivialRedux;
+const {combineEndpoints, rest} = require( '../../src/index')
 
-trivialRedux = require('../src/index');
 
-actionTypesFor = require('../src/action_types');
-
-actionTypeFor = require('../src/action_type');
-
-api = trivialRedux({
-  todos: {
+const api = trivialRedux({
+  todos: rest({
     entry: 'http://www.somesite.somedomain/todos',
-    type: 'rest',
     stateless: true
-  }
+  })
 });
 
 describe('Stateless endpoint', function() {

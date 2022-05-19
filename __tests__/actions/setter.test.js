@@ -1,16 +1,15 @@
-var actionTypeFor, api, trivialRedux;
+const {default: actionTypeFor} = require('../../src/action_type');
 
-trivialRedux = require('../../src/index');
 
-actionTypeFor = require('../../src/action_type');
+const {combineEndpoints, setter} = require( '../../src/index')
 
-api = null;
+let api = null;
 
 beforeEach(function() {
-  return api = trivialRedux({
-    token: {
+  return api = combineEndpoints({
+    token: setter({
       type: 'setter'
-    }
+    })
   });
 });
 

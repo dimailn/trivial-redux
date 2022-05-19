@@ -18,6 +18,8 @@ export default function<S, Actions, AsyncActions, AsyncActionsTypes>(
     ...type.options
   }
 
+  const {stateless} = options
+
   const syncActions = type.actions(entityName, options)
   const asyncActions = type.asyncActions(entityName, options)
 
@@ -28,9 +30,9 @@ export default function<S, Actions, AsyncActions, AsyncActionsTypes>(
 
   const requests = Object.fromEntries(
     Object.entries(type.asyncActions(entityName, options)).map(([actionName, action]) =>
-      [actionName, createRequestFromAction(action)]
+      [actionName, (...args) => createRequestFromAction(action(...args))]
     )
-  ) as ReturnType<typeof type.asyncActions>
+  ) as any as ReturnType<typeof type.asyncActions>
 
 
   const types = createActionTypes(entityName, syncActions, asyncActions) as {
@@ -41,6 +43,13 @@ export default function<S, Actions, AsyncActions, AsyncActionsTypes>(
 
   const reducer: OmitThisParameter<ReturnType<typeof type.reducer>> = createReducer(entityName, type.reducer, options, allTypes, types)
 
+  
+  if(stateless){
+    return {
+      types,
+      requests
+    }
+  }
 
   return {
     actions,

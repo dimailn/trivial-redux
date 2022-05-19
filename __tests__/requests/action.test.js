@@ -1,16 +1,15 @@
-var actionTypeFor, actionTypesFor, api, trivialRedux;
+const {default: actionTypesFor} = require('../../src/action_types');
 
-trivialRedux = require('../../src/index');
+const {default: actionTypeFor} = require('../../src/action_type');
 
-actionTypesFor = require('../../src/action_types');
 
-actionTypeFor = require('../../src/action_type');
 
-api = trivialRedux({
-  todos: {
-    entry: 'http://www.somesite.somedomain/todos',
-    type: 'action'
-  }
+const {combineEndpoints, action} = require( '../../src/index')
+
+const api = combineEndpoints({
+  todos: action({
+    entry: 'http://www.somesite.somedomain/todos'
+  })
 });
 
 describe('Fetch actions', function() {

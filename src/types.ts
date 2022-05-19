@@ -23,6 +23,7 @@ type TrivialReduxExternalReducer<Actions, AsyncActions, S> = TrivialReduxReducer
 export interface TrivialReduxCommonOptions {
   skipFormat?: boolean
   host?: string
+  stateless?: boolean
 }
 export type TrivialReduxEndpointOptions<S, Actions, AsyncActions> =  {
   initialState?: S
@@ -43,9 +44,9 @@ export interface TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes> {
 }
 
 export type ApiForType<S, A, AA, AAT> = {
-  actions: ReturnType<TrivialReduxType<S, A, AA, AAT>['actions']> & ReturnType<TrivialReduxType<S, A, AA, AAT>['asyncActions']>
+  actions?: ReturnType<TrivialReduxType<S, A, AA, AAT>['actions']> & ReturnType<TrivialReduxType<S, A, AA, AAT>['asyncActions']>
   requests: ReturnType<TrivialReduxType<S, A, AA, AAT>['asyncActions']>
-  reducer: OmitThisParameter<ReturnType<TrivialReduxType<S, A, AA, AAT>['reducer']>>,
+  reducer?: OmitThisParameter<ReturnType<TrivialReduxType<S, A, AA, AAT>['reducer']>>,
   types: {
     [K in keyof ReturnType<TrivialReduxType<S, A, AA, AAT>['actions']>]: string
   } & {
@@ -53,6 +54,8 @@ export type ApiForType<S, A, AA, AAT> = {
   }
   asyncActionTypes?: TrivialReduxType<S, A, AA, AAT>['asyncActionsTypes'],
 }
+
+export type SatelessApiForType<S, A, AA, AAT> = Omit<ApiForType<S, A, AA, AAT>, 'reducer' | 'actions'>
 
 interface TrivialReduxTypeDescriptor {
   actions: (...args: any) => any
