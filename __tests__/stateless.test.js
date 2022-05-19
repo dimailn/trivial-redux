@@ -1,7 +1,7 @@
-const {combineEndpoints, rest} = require( '../../src/index')
+const {combineEndpoints, rest} = require( '../src/index')
 
 
-const api = trivialRedux({
+const api = combineEndpoints({
   todos: rest({
     entry: 'http://www.somesite.somedomain/todos',
     stateless: true

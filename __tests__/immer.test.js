@@ -1,23 +1,24 @@
-var actionTypeFor, actionTypesFor, api, defaultStates, ref, trivialRedux;
+const {default: actionTypesFor} = require('../src/action_types');
 
-trivialRedux = (ref = require('../src/index'), defaultStates = ref.defaultStates, ref);
+const {default: actionTypeFor} = require('../src/action_type');
+const {default: restDefaultState} = require('../src/states/rest')
 
-actionTypesFor = require('../src/action_types');
 
-actionTypeFor = require('../src/action_type');
 
-api = trivialRedux({
-  todos: {
+const {combineEndpoints, rest} = require( '../src/index')
+
+
+let api = combineEndpoints({
+  todos: rest({
     entry: 'http://www.somesite.somedomain/todos',
-    type: 'rest',
     immer: true
-  }
+  })
 });
 
 describe('Immer mode', function() {
   test("internal reducers works the same", function() {
     var state;
-    state = Object.assign({}, defaultStates.rest);
+    state = Object.assign({}, restDefaultState);
     state = api.reducers.todos(state, {
       type: api.types.todos.index.load,
       payload: []
@@ -26,10 +27,9 @@ describe('Immer mode', function() {
   });
   test("mutation produces new object", function() {
     var firstState, state;
-    api = trivialRedux({
-      todos: {
+    api = combineEndpoints({
+      todos: rest({
         entry: 'http://www.somesite.somedomain/todos',
-        type: 'rest',
         immer: true,
         reducer: function(state, action) {
           switch (action.type) {
@@ -38,9 +38,9 @@ describe('Immer mode', function() {
               state.newKey = true;
           }
         }
-      }
+      })
     });
-    firstState = Object.assign({}, defaultStates.rest);
+    firstState = Object.assign({}, restDefaultState);
     state = api.reducers.todos(firstState, {
       type: api.types.todos.index.load,
       payload: []
@@ -51,8 +51,8 @@ describe('Immer mode', function() {
   });
   return test("return new state", function() {
     var firstState, state;
-    api = trivialRedux({
-      todos: {
+    api = combineEndpoints({
+      todos: rest({
         entry: 'http://www.somesite.somedomain/todos',
         type: 'rest',
         reducer: function(state, action) {
@@ -66,9 +66,9 @@ describe('Immer mode', function() {
               return state;
           }
         }
-      }
+      })
     });
-    firstState = Object.assign({}, defaultStates.rest);
+    firstState = Object.assign({}, restDefaultState);
     state = api.reducers.todos(firstState, {
       type: api.types.todos.index.load,
       payload: []
