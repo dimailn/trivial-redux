@@ -3,6 +3,7 @@ import {TrivialReduxType, AsyncActionTypes} from '../types'
 import actionTypesFor from '../action_types'
 import actionTypeFor from '../action_type'
 import defaultState from '../states/action'
+import createType from '../create-type'
 
 interface TypeActions<S> {
   reset: () => {type: string}
@@ -35,12 +36,10 @@ interface DefaultInitialState<D> {
   data: D
 }
 
-export default <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
+const type = <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
   options: TrivialReduxEndpointOptions<S> = {}
 ) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
-  let {initialState} = options
-
-  initialState ||= defaultState as S
+  const {initialState} = options
 
   return {
     name: 'test',
@@ -106,3 +105,5 @@ export default <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
     }
   }
 }
+
+export default createType(type, defaultState)

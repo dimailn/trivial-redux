@@ -4,7 +4,7 @@ import {AxiosResponse} from 'axios'
 import actionTypesFor from '../action_types'
 import actionTypeFor from '../action_type'
 import {rest as  defaultState} from '../states'
-
+import createType from '../create-type'
 interface TypeActions<S> {
   reset: () => {type: string}
 }
@@ -102,12 +102,10 @@ const handleNextPage = function(state, action, types) {
   }
 };
 
-const rest = <M extends {id: number | string}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
+const type = <M extends {id: number | string}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
   options: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
 ) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
-  let {initialState} = options
-
-  initialState ||= defaultState as S
+  const {initialState} = options
 
   return {
     name: 'test',
@@ -281,5 +279,4 @@ const rest = <M extends {id: number | string}, S extends DefaultInitialState<M> 
   }
 }
 
-
-export default rest
+export default createType(type, defaultState)

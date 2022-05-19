@@ -2,6 +2,8 @@ import urlFormat from '../utils/url_format'
 import {TrivialReduxType} from '../types'
 import actionTypesFor from '../action_types'
 import actionTypeFor from '../action_type'
+import createType from '../create-type'
+import {fetch as  defaultState} from '../states'
 
 interface TypeActions<S> {
   reset: () => {type: string}
@@ -35,7 +37,7 @@ interface DefaultInitialState<D> {
   data: D
 }
 
-export default <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
+const type = <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
   options: TrivialReduxEndpointOptions<S> = {}
 ) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
   const {initialState} = options
@@ -109,3 +111,5 @@ export default <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
     }
   }
 }
+
+export default createType(type, defaultState)

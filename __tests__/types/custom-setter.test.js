@@ -1,18 +1,20 @@
-var actionTypeFor, actionTypesFor, api, cloneDeep, customSetter, defaultState, defaultStates, endpoints, reducer, ref, trivialRedux;
+var api, cloneDeep, customSetter, reducer
 
-trivialRedux = (ref = require('../../src/index'), defaultStates = ref.defaultStates, ref);
+const {default: actionTypesFor} = require('../../src/action_types');
 
-actionTypesFor = require('../../src/action_types');
+const {default: actionTypeFor} = require('../../src/action_type');
 
-actionTypeFor = require('../../src/action_type');
+const {default: setterDefaultState} = require('../../src/states/setter')
 
-defaultState = require('../../src/states/setter');
+
+const {combineEndpoints, rest} = require( '../../src/index')
 
 cloneDeep = require('lodash').cloneDeep;
 
-customSetter = {
+
+customSetter = ({initialState}) => ({
   name: 'custom-setter',
-  initialState: null,
+  initialState,
   reducer: function(entityName, initialState) {
     return function(state, action) {
       if (state == null) {
@@ -28,7 +30,10 @@ customSetter = {
       }
     };
   },
-  actions: function(entityName, endpoint, settings) {
+  asyncActions(){
+    return {}
+  },
+  actions: function(entityName, options) {
     return {
       set: function(data) {
         return {
@@ -40,16 +45,12 @@ customSetter = {
       }
     };
   }
-};
+});
 
-endpoints = {
-  token: {
-    type: 'custom-setter'
-  }
-};
 
-api = trivialRedux(endpoints, {
-  types: [customSetter]
+
+api = combineEndpoints({
+  token: customSetter({})
 });
 
 reducer = api.reducers.token;
@@ -57,13 +58,13 @@ reducer = api.reducers.token;
 describe('CUSTOM SETTER reducer', function() {
   test('set', function() {
     var state;
-    state = reducer(defaultStates.setter, api.actions.token.set('SOME_TOKEN'));
+    state = reducer(setterDefaultState, api.actions.token.set('SOME_TOKEN'));
     return expect(state).toBe('SOME_TOKEN');
   });
   test('reset', function() {
     var state;
     state = reducer('SOME_TOKEN', api.actions.token.reset());
-    return expect(state).toBe(defaultStates.setter);
+    return expect(state).toBe(setterDefaultState);
   });
   return test('unknown action', function() {
     var state;
