@@ -1,8 +1,8 @@
-import {Api} from './types'
+import {Api, TrivialReduxCommonOptions} from './types'
 import createApiForType from './create-api-for-type'
 
 
-export default <T>(endpoints: T) : Api<T> => {
+export default <T>(endpoints: T, settings: TrivialReduxCommonOptions) : Api<T> => {
 
   const api =  {
     actions: {},
@@ -12,7 +12,7 @@ export default <T>(endpoints: T) : Api<T> => {
   }
 
   Object.entries(endpoints).forEach(([name, factory]) => {
-    const {reducer, actions, requests, types} = createApiForType(name, factory, api.types)
+    const {reducer, actions, requests, types} = createApiForType(name, factory, api.types, settings)
 
     api.reducers[name] = reducer
     api.requests[name] = requests

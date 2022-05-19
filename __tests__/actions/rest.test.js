@@ -1,16 +1,16 @@
-var actionTypeFor, actionTypesFor, api, trivialRedux;
+const {default: actionTypesFor} = require('../../src/action_types');
 
-trivialRedux = require('../../src/index');
+const {default: actionTypeFor} = require('../../src/action_type');
 
-actionTypesFor = require('../../src/action_types');
 
-actionTypeFor = require('../../src/action_type');
 
-api = null;
+const {combineEndpoints, rest} = require( '../../src/index')
+
+let api = null
 
 beforeEach(function() {
-  return api = trivialRedux({
-    todos: 'http://www.somesite.somedomain/todos'
+  return api = combineEndpoints({
+    todos: rest({entry: 'http://www.somesite.somedomain/todos' })
   });
 });
 
@@ -36,10 +36,10 @@ describe('REST actions', function() {
   });
   test('index without params with own host', function() {
     var fetch;
-    api = trivialRedux({
-      todos: {
+    api = combineEndpoints({
+      todos: rest({
         entry: '~todos'
-      }
+      })
     }, {
       host: 'http://www.somesite.somedomain/'
     });
@@ -48,8 +48,8 @@ describe('REST actions', function() {
   });
   test('index without params with own host(simple endpoint description)', function() {
     var fetch;
-    api = trivialRedux({
-      todos: '~todos'
+    api = combineEndpoints({
+      todos: rest({entry: '~todos'})
     }, {
       host: 'http://www.somesite.somedomain/'
     });
@@ -121,15 +121,15 @@ describe('REST actions', function() {
   });
   return test('nextPage with extra', function() {
     var dispatch, fAction, getState;
-    api = trivialRedux({
-      todos: {
+    api = combineEndpoints({
+      todos: rest({
         entry: 'http://www.somesite.somedomain/todos',
         extra: {
           meta: {
             skipSome: true
           }
         }
-      }
+      })
     });
     getState = function() {
       return {

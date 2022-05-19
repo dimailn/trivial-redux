@@ -1,4 +1,4 @@
-import { TrivialReduxType, ApiForType, AsyncActionTypes } from "./types"
+import { TrivialReduxType, ApiForType, AsyncActionTypes, TrivialReduxCommonOptions } from "./types"
 import createReducer from "./utils/create-reducer"
 import createRequestFromAction from "./create-request-from-action"
 import createActionTypes from "./utils/create-action-types"
@@ -7,11 +7,13 @@ import defaultOptions from "./default-options"
 export default function<S, Actions, AsyncActions, AsyncActionsTypes>(
   entityName: string,
   type: TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes>,
-  allTypes: any
+  allTypes: any,
+  settings: TrivialReduxCommonOptions
 ): ApiForType<S, Actions, AsyncActions, AsyncActionsTypes> {
 
   const options = {
     ...defaultOptions(),
+    ...settings,
     initialState: type.initialState,
     ...type.options
   }

@@ -19,12 +19,16 @@ type TrivialReduxReducer<Actions, AsyncActions, S, ReducerReturnValue> = (this: 
 type TrivialReduxInnerReducer<Actions, AsyncActions, S> = TrivialReduxReducer<Actions, AsyncActions, S, S | void>
 type TrivialReduxExternalReducer<Actions, AsyncActions, S> = TrivialReduxReducer<Actions, AsyncActions, S, S>
 
-export interface TrivialReduxEndpointOptions<S, Actions, AsyncActions> {
-  initialState?: S
+
+export interface TrivialReduxCommonOptions {
   skipFormat?: boolean
+  host?: string
+}
+export type TrivialReduxEndpointOptions<S, Actions, AsyncActions> =  {
+  initialState?: S
   entry?: string
   reducer?: TrivialReduxInnerReducer<Actions, AsyncActions, S>
-}
+} &  TrivialReduxCommonOptions
 
 
 
