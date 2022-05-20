@@ -1,5 +1,5 @@
 import urlFormat from '../utils/url_format'
-import {InternalTrivialReduxType, AsyncActionTypes} from '../types'
+import {InternalTrivialReduxType, AsyncActionTypes, TrivialReduxEndpointOptions} from '../types'
 import actionTypesFor from '../action_types'
 import actionTypeFor from '../action_type'
 import defaultState from '../states/action'
@@ -26,10 +26,6 @@ interface TypeAsyncActionsTypes<T> {
   execute: () => AxiosResponse<T>
 }
 
-interface TrivialReduxEndpointOptions<S> {
-  initialState?: S
-}
-
 interface DefaultInitialState<D> {
   pending: boolean
   lastExecutedAt: number
@@ -37,7 +33,7 @@ interface DefaultInitialState<D> {
 }
 
 const type = <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
-  options: TrivialReduxEndpointOptions<S> = {}
+  options: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
 ) : InternalTrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
   const {initialState} = options
 

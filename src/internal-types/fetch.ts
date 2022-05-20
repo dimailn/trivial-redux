@@ -1,5 +1,5 @@
 import urlFormat from '../utils/url_format'
-import {InternalTrivialReduxType} from '../types'
+import {InternalTrivialReduxType, TrivialReduxEndpointOptions} from '../types'
 import actionTypesFor from '../action_types'
 import actionTypeFor from '../action_type'
 import createType from '../create-type'
@@ -25,10 +25,6 @@ interface TypeAsyncActionsTypes<T> {
   fetch: () => AxiosResponse<T>
 }
 
-interface TrivialReduxEndpointOptions<S> {
-  initialState?: S
-}
-
 interface DefaultInitialState<D> {
   fetching: boolean
   lastUpdatedAt: number
@@ -36,7 +32,7 @@ interface DefaultInitialState<D> {
 }
 
 const type = <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
-  options: TrivialReduxEndpointOptions<S> = {}
+  options: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
 ) : InternalTrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
   const {initialState} = options
   return {
