@@ -12,19 +12,12 @@ interface Account {
   title: string
 }
 
-
-
-// createApiForType('', rest<Account>()).actions.update()
-
-
 const api = combineEndpoints(
   {
     accounts: rest<Account>(),
     currentAccount: setter<Account>()
   }
 )
-
-api.actions.accounts.reset().type
 
 
 // const useMyApi = () => useApi<typeof api>()
@@ -37,9 +30,6 @@ api.actions.accounts.reset().type
 //   // data.id
 
 // })
-
-
-
 
 
 export {

@@ -19,7 +19,7 @@ export interface SyncActionPartial {
   type: string
 }
 
-export interface RequestPartial extends AsyncActionTypes {
+export interface RequestPartial extends AsyncActionPartial {
   isRequest: true
 }
 
