@@ -5,6 +5,7 @@ import action from './internal-types/action'
 
 import combineEndpoints from './combine-endpoints'
 import useApi from './use-api'
+import createType from './create-type'
 
 interface Account {
   id: string
@@ -12,9 +13,8 @@ interface Account {
 }
 
 
-// createApiForType('', rest<Account>()).actions.update()
 
-// combineEndpoints
+// createApiForType('', rest<Account>()).actions.update()
 
 
 // const api = combineEndpoints(
@@ -24,6 +24,7 @@ interface Account {
 //   }
 // )
 
+// api.actions.accounts.create().types.
 
 
 // const useMyApi = () => useApi<typeof api>()
@@ -44,6 +45,7 @@ interface Account {
 export {
   combineEndpoints,
   useApi,
+  createType,
   rest,
   action,
   fetch,

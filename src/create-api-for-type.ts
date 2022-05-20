@@ -1,12 +1,53 @@
-import { TrivialReduxType, ApiForType, AsyncActionTypes, TrivialReduxCommonOptions, TrivialReduxEndpointOptions } from "./types"
+import { TrivialReduxType, ApiForType, AsyncActionTypes, TrivialReduxCommonOptions, TrivialReduxEndpointOptions, IActions, ActionsWithType, SyncActionType, AsyncActionType } from "./types"
 import createReducer from "./utils/create-reducer"
 import createRequestFromAction from "./create-request-from-action"
 import createActionTypes from "./utils/create-action-types"
 import defaultOptions from "./default-options"
+import actionTypeFor from "./action_type"
+import actionTypesFor from "./action_types"
+import { cloneDeep } from "lodash"
 
 
 
-export default function<S, Actions, AsyncActions, AsyncActionsTypes>(
+const syncActionsWithType = <Actions extends IActions>(entityName: string, actions: ActionsWithType<Actions, {}>) : ActionsWithType<Actions, SyncActionType> => {
+
+  return Object.fromEntries(
+    Object.entries(actions).map(([name, action]) => [name, (...args) => ({type: actionTypeFor(name, entityName), ...action(...args)})])
+  ) as ActionsWithType<Actions, SyncActionType>
+}
+
+
+const asyncActionsWithType = <Actions extends IActions>(entityName: string, actions: ActionsWithType<Actions, {}>) : ActionsWithType<Actions, AsyncActionType> => {
+
+  return Object.fromEntries(
+    Object.entries(actions).map(([name, action]) => {
+
+
+      return [name, (...args) => {
+        const actionResult = action(...args)
+
+        if(typeof actionResult === 'function'){
+
+          return (dispatch, getState) => {
+            const wrappedDispatch = (dispatchedAction) => {
+              return dispatch({ types: actionTypesFor(name, entityName), ...cloneDeep(dispatchedAction) })
+            };
+
+            return actionResult(wrappedDispatch, getState)
+          }
+
+        } else {
+          return { types: actionTypesFor(name, entityName), ... actionResult}
+        }
+
+      }]
+
+    })
+  ) as ActionsWithType<Actions, AsyncActionType>
+}
+
+
+export default function<S, Actions extends IActions, AsyncActions extends IActions, AsyncActionsTypes>(
   entityName: string,
   type: TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes>,
   allTypes: any,
@@ -22,8 +63,8 @@ export default function<S, Actions, AsyncActions, AsyncActionsTypes>(
 
   const {stateless} = options
 
-  const syncActions = type.actions(entityName, options)
-  const asyncActions = type.asyncActions(entityName, options)
+  const syncActions = syncActionsWithType(entityName, type.actions(entityName, options))
+  const asyncActions = asyncActionsWithType(entityName, type.asyncActions(entityName, options))
 
   const actions = {
     ...syncActions,
@@ -45,7 +86,7 @@ export default function<S, Actions, AsyncActions, AsyncActionsTypes>(
 
   const reducer: OmitThisParameter<ReturnType<typeof type.reducer>> = createReducer(entityName, type.reducer, options, allTypes, types)
 
-  
+
   if(stateless){
     return {
       types,

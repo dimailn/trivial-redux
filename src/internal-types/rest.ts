@@ -5,13 +5,12 @@ import actionTypesFor from '../action_types'
 import actionTypeFor from '../action_type'
 import {rest as  defaultState} from '../states'
 import createType from '../create-type'
-interface TypeActions<S> {
-  reset: () => {type: string}
+type TypeActions<S> = {
+  reset: () => {}
 }
 
-interface TypeAsyncActions {
+type TypeAsyncActions = {
   index: (params?: any) => {
-    types: AsyncActionTypes
     meta: {
       fetch: {
         url: string
@@ -20,7 +19,6 @@ interface TypeAsyncActions {
     }
   }
   show: (id: number | string) => {
-    types: AsyncActionTypes
     meta: {
       fetch: {
         url: string
@@ -28,7 +26,6 @@ interface TypeAsyncActions {
     }
   }
   create: (data) => {
-    types: AsyncActionTypes,
     meta: {
       fetch: {
         url: string
@@ -38,7 +35,6 @@ interface TypeAsyncActions {
     }
   }
   update: (id: number | string, data) => {
-    types: AsyncActionTypes,
     meta: {
       fetch: {
         url: string
@@ -48,7 +44,6 @@ interface TypeAsyncActions {
     }
   }
   destroy: (id: number | string) => {
-    types: AsyncActionTypes
     meta: {
       fetch: {
         url: string
@@ -57,7 +52,6 @@ interface TypeAsyncActions {
     }
   }
   nextPage: (params) => (dispatch, getState) => {
-    types: AsyncActionTypes
     meta: {
       fetch: {
         url: string,
@@ -114,9 +108,7 @@ const type = <M extends {id: number | string}, S extends DefaultInitialState<M> 
     actions(entityName){
       return {
         reset: function() {
-          return {
-            type: actionTypeFor('reset', entityName)
-          };
+          return {}
         }
       }
     },
@@ -131,8 +123,6 @@ const type = <M extends {id: number | string}, S extends DefaultInitialState<M> 
             break;
           case this.types.index.success:
             state.lastUpdatedAt = new Date().getTime();
-
-            console.log(state)
 
             state.data.collection = action.payload;
             state.fetching = false;
@@ -154,8 +144,6 @@ const type = <M extends {id: number | string}, S extends DefaultInitialState<M> 
             state.error = action.response;
             break;
           case this.types.reset:
-            console.log(initialState)
-
             Object.keys(initialState).forEach((function(_this) {
               return function(key) {
                 return state[key] = initialState[key];
@@ -196,7 +184,6 @@ const type = <M extends {id: number | string}, S extends DefaultInitialState<M> 
       return {
         index: function(params) {
           return {
-            types: actionTypesFor('index', entityName),
             meta: {
               fetch: {
                 url: format(entry),
@@ -207,7 +194,6 @@ const type = <M extends {id: number | string}, S extends DefaultInitialState<M> 
         },
         show: function(id) {
           return {
-            types: actionTypesFor('show', entityName),
             meta: {
               fetch: {
                 url: format(entry + "/" + id)
@@ -217,7 +203,6 @@ const type = <M extends {id: number | string}, S extends DefaultInitialState<M> 
         },
         create: function(data) {
           return {
-            types: actionTypesFor('create', entityName),
             meta: {
               fetch: {
                 url: format(entry),
@@ -229,7 +214,6 @@ const type = <M extends {id: number | string}, S extends DefaultInitialState<M> 
         },
         update: function(id, data) {
           return {
-            types: actionTypesFor('update', entityName),
             meta: {
               fetch: {
                 url: format(entry + "/" + id),
@@ -241,18 +225,12 @@ const type = <M extends {id: number | string}, S extends DefaultInitialState<M> 
         },
         destroy: function(id) {
           return {
-            types: actionTypesFor('destroy', entityName),
             meta: {
               fetch: {
                 url: format(entry + "/" + id),
                 method: "DELETE"
               }
             }
-          };
-        },
-        reset: function() {
-          return {
-            type: actionTypeFor('reset', entityName)
           };
         },
         nextPage: function(params) {
@@ -263,7 +241,6 @@ const type = <M extends {id: number | string}, S extends DefaultInitialState<M> 
               page: nextPage || 1
             }, params);
             return dispatch({
-              types: actionTypesFor('nextPage', entityName),
               meta: {
                 fetch: {
                   url: format(entry),

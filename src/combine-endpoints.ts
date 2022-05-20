@@ -2,7 +2,7 @@ import {Api, TrivialReduxCommonOptions} from './types'
 import createApiForType from './create-api-for-type'
 
 
-export default <T>(endpoints: T, settings: TrivialReduxCommonOptions) : Api<T> => {
+export default <T>(endpoints: T, settings: TrivialReduxCommonOptions = {}) : Api<T> => {
 
   const api =  {
     actions: {},

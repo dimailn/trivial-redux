@@ -1,4 +1,13 @@
-type ActionsGenerator<T, S, Actions, AsyncActions> = (entityName: string, options: TrivialReduxEndpointOptions<S, Actions, AsyncActions>) => T
+export type IActions = {
+  [name: string]: (...args: any) => any
+}
+
+export type ActionsWithType<Actions extends IActions, Type> = {
+  [Action in keyof Actions]: (...args: Parameters<Actions[Action]>) => ReturnType<Actions[Action]> & Type
+}
+
+type ActionsGenerator<T extends IActions, S, Actions extends IActions, AsyncActions extends IActions, ActionType> =
+  (entityName: string, options: TrivialReduxEndpointOptions<S, Actions, AsyncActions>) => ActionsWithType<T, ActionType>
 
 export interface AsyncActionTypes  {
   load: string
@@ -6,18 +15,26 @@ export interface AsyncActionTypes  {
   failure: string
 }
 
-type TrivialReduxReducer<Actions, AsyncActions, S, ReducerReturnValue> = (this: {
+export interface SyncActionType {
+  type: string
+}
+
+export interface AsyncActionType {
+  types: AsyncActionTypes
+}
+
+type TrivialReduxReducer<Actions extends IActions, AsyncActions extends IActions, S, ReducerReturnValue> = (this: {
   types: {
-    [K in keyof ReturnType<ActionsGenerator<Actions, S, Actions, AsyncActions>>]: string
+    [K in keyof ReturnType<ActionsGenerator<Actions, S, Actions, AsyncActions, SyncActionType>>]: string
   } & {
-    [K in keyof ReturnType<ActionsGenerator<AsyncActions, S, Actions, AsyncActions>>]: AsyncActionTypes
+    [K in keyof ReturnType<ActionsGenerator<AsyncActions, S, Actions, AsyncActions, AsyncActionType>>]: AsyncActionTypes
   }
   allTypes: any
 }, state: S, action: any) => ReducerReturnValue
 
 
-type TrivialReduxInnerReducer<Actions, AsyncActions, S> = TrivialReduxReducer<Actions, AsyncActions, S, S | void>
-type TrivialReduxExternalReducer<Actions, AsyncActions, S> = TrivialReduxReducer<Actions, AsyncActions, S, S>
+type TrivialReduxInnerReducer<Actions extends IActions, AsyncActions extends IActions, S> = TrivialReduxReducer<Actions, AsyncActions, S, S | void>
+type TrivialReduxExternalReducer<Actions extends IActions, AsyncActions extends IActions, S> = TrivialReduxReducer<Actions, AsyncActions, S, S>
 
 
 export interface TrivialReduxCommonOptions {
@@ -25,7 +42,7 @@ export interface TrivialReduxCommonOptions {
   host?: string
   stateless?: boolean
 }
-export type TrivialReduxEndpointOptions<S, Actions, AsyncActions> =  {
+export type TrivialReduxEndpointOptions<S, Actions extends IActions, AsyncActions extends IActions> =  {
   initialState?: S
   entry?: string
   reducer?: TrivialReduxInnerReducer<Actions, AsyncActions, S>
@@ -33,17 +50,17 @@ export type TrivialReduxEndpointOptions<S, Actions, AsyncActions> =  {
 
 
 
-export interface TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes> {
+export interface TrivialReduxType<S, Actions extends IActions, AsyncActions extends IActions, AsyncActionsTypes> {
   name: string
   initialState: S
-  actions: ActionsGenerator<Actions, S, Actions, AsyncActions>
-  asyncActions: ActionsGenerator<AsyncActions, S, Actions, AsyncActions>
+  actions: ActionsGenerator<Actions, S, Actions, AsyncActions, {}>
+  asyncActions: ActionsGenerator<AsyncActions, S, Actions, AsyncActions, {}>
   reducer: (entityName: string, initialState: S) => OmitThisParameter<TrivialReduxExternalReducer<Actions, AsyncActions, S>>
   asyncActionsTypes?: AsyncActionsTypes
   options: TrivialReduxEndpointOptions<S, Actions, AsyncActions>
 }
 
-export type ApiForType<S, A, AA, AAT> = {
+export type ApiForType<S, A extends IActions, AA extends IActions, AAT> = {
   actions?: ReturnType<TrivialReduxType<S, A, AA, AAT>['actions']> & ReturnType<TrivialReduxType<S, A, AA, AAT>['asyncActions']>
   requests: ReturnType<TrivialReduxType<S, A, AA, AAT>['asyncActions']>
   reducer?: OmitThisParameter<ReturnType<TrivialReduxType<S, A, AA, AAT>['reducer']>>,
@@ -55,7 +72,7 @@ export type ApiForType<S, A, AA, AAT> = {
   asyncActionTypes?: TrivialReduxType<S, A, AA, AAT>['asyncActionsTypes'],
 }
 
-export type SatelessApiForType<S, A, AA, AAT> = Omit<ApiForType<S, A, AA, AAT>, 'reducer' | 'actions'>
+export type SatelessApiForType<S, A extends IActions, AA extends IActions, AAT> = Omit<ApiForType<S, A, AA, AAT>, 'reducer' | 'actions'>
 
 interface TrivialReduxTypeDescriptor {
   actions: (...args: any) => any

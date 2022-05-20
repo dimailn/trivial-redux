@@ -1,4 +1,4 @@
-var api, cloneDeep, customSetter, reducer
+var cloneDeep, customSetter, reducer
 
 const {default: actionTypesFor} = require('../../src/action_types');
 
@@ -7,12 +7,12 @@ const {default: actionTypeFor} = require('../../src/action_type');
 const {default: setterDefaultState} = require('../../src/states/setter')
 
 
-const {combineEndpoints, rest} = require( '../../src/index')
+const {combineEndpoints, rest, createType} = require( '../../src/index')
 
 cloneDeep = require('lodash').cloneDeep;
 
 
-customSetter = ({initialState}) => ({
+customSetter = createType(({initialState}) => ({
   name: 'custom-setter',
   initialState,
   reducer: function(entityName, initialState) {
@@ -45,13 +45,14 @@ customSetter = ({initialState}) => ({
       }
     };
   }
-});
+}), null);
 
 
 
-api = combineEndpoints({
+const api = combineEndpoints({
   token: customSetter({})
 });
+
 
 reducer = api.reducers.token;
 
