@@ -73,7 +73,7 @@ describe('REST actions', function() {
     fetch = action.meta.fetch;
     expect(fetch.url).toBe('http://www.somesite.somedomain/todos.json');
     expect(fetch.method).toBe('POST');
-    expect(fetch.data).toBe(data);
+    expect(fetch.data).toEqual(data);
     return expect(action.types).toEqual(actionTypesFor('create', 'todos'));
   });
   test('update', function() {
@@ -84,7 +84,7 @@ describe('REST actions', function() {
     ref = api.actions.todos.update(5, data), (ref1 = ref.meta, fetch = ref1.fetch), types = ref.types;
     expect(fetch.url).toBe('http://www.somesite.somedomain/todos/5.json');
     expect(fetch.method).toBe('PUT');
-    expect(fetch.data).toBe(data);
+    expect(fetch.data).toEqual(data);
     return expect(types).toEqual(actionTypesFor('update', 'todos'));
   });
   test('destroy', function() {

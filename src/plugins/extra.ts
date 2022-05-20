@@ -3,7 +3,7 @@ var _, applyExtra,
 
 _ = require('lodash');
 
-applyExtra = function(actions, extra) {
+export default function(actions, extra) {
   var actionCreator, actionName, actionsWithExtra, fn;
   actionsWithExtra = {};
   fn = function(actionCreator) {
@@ -29,11 +29,4 @@ applyExtra = function(actions, extra) {
     fn(actionCreator);
   }
   return actionsWithExtra;
-};
-
-module.exports = function(name, endpoint, api) {
-  if (endpoint.extra) {
-    api.actions[name] = applyExtra(api.actions[name], endpoint.extra);
-    return api.requests[name] = applyExtra(api.requests[name], endpoint.extra);
-  }
-};
+}

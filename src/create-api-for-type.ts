@@ -6,7 +6,7 @@ import defaultOptions from "./default-options"
 import actionTypeFor from "./action_type"
 import actionTypesFor from "./action_types"
 import { cloneDeep } from "lodash"
-
+import applyExtra from './plugins/extra'
 
 
 const syncActionsWithType = <Actions extends IActions>(entityName: string, actions: ActionsWithType<Actions, {}>) : ActionsWithType<Actions, SyncActionType> => {
@@ -64,7 +64,7 @@ export default function<S, Actions extends IActions, AsyncActions extends IActio
   const {stateless} = options
 
   const syncActions = syncActionsWithType(entityName, type.actions(entityName, options))
-  const asyncActions = asyncActionsWithType(entityName, type.asyncActions(entityName, options))
+  const asyncActions = applyExtra(asyncActionsWithType(entityName, type.asyncActions(entityName, options)), options.extra)
 
   const actions = {
     ...syncActions,

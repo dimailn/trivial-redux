@@ -41,6 +41,7 @@ export interface TrivialReduxCommonOptions {
   skipFormat?: boolean
   host?: string
   stateless?: boolean
+  extra: any
 }
 export type TrivialReduxEndpointOptions<S, Actions extends IActions, AsyncActions extends IActions> =  {
   initialState?: S
