@@ -1,5 +1,5 @@
 import urlFormat from '../utils/url_format'
-import {TrivialReduxEndpointOptions, TrivialReduxType, AsyncActionTypes} from '../types'
+import {TrivialReduxEndpointOptions, InternalTrivialReduxType, AsyncActionTypes} from '../types'
 import {AxiosResponse} from 'axios'
 import actionTypesFor from '../action_types'
 import actionTypeFor from '../action_type'
@@ -98,7 +98,7 @@ const handleNextPage = function(state, action, types) {
 
 const type = <M extends {id: number | string}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
   options: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
-) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
+) : InternalTrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
   const {initialState} = options
 
   return {

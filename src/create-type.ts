@@ -4,9 +4,9 @@ type Type<S, Actions, AsyncActions, AsyncActionsTypes> = (options: TrivialReduxE
 
 export default <T extends Function>(type: T, defaultState) : T => {
 
-  const wrappedType : T = ((options) => {
+  const wrappedType : T = ((options = {}) => {
     options.initialState ||= defaultState
-    
+
     return type(options)
   }) as any
 

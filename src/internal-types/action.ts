@@ -1,17 +1,16 @@
 import urlFormat from '../utils/url_format'
-import {TrivialReduxType, AsyncActionTypes} from '../types'
+import {InternalTrivialReduxType, AsyncActionTypes} from '../types'
 import actionTypesFor from '../action_types'
 import actionTypeFor from '../action_type'
 import defaultState from '../states/action'
 import createType from '../create-type'
 
-interface TypeActions<S> {
-  reset: () => {type: string}
+type TypeActions<S> = {
+  reset: () => {}
 }
 
-interface TypeAsyncActions {
+type TypeAsyncActions = {
   execute: (data: object, options: object) => {
-    types: AsyncActionTypes
     meta: {
       fetch: {
         url: string
@@ -38,7 +37,7 @@ interface DefaultInitialState<D> {
 
 const type = <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
   options: TrivialReduxEndpointOptions<S> = {}
-) : TrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
+) : InternalTrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
   const {initialState} = options
 
   return {
@@ -49,7 +48,6 @@ const type = <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
       return {
         reset: function() {
           return {
-            type: actionTypeFor('reset', entityName)
           };
         }
       }
@@ -91,7 +89,6 @@ const type = <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
       return {
         execute: function(data: object, options: object) {
           return {
-            types: actionTypesFor('execute', entityName),
             meta: {
               fetch: Object.assign({}, {
                 url: format(entry),

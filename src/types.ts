@@ -2,12 +2,12 @@ export type IActions = {
   [name: string]: (...args: any) => any
 }
 
-export type ActionsWithType<Actions extends IActions, Type> = {
+export type ActionsWithPartial<Actions extends IActions, Type> = {
   [Action in keyof Actions]: (...args: Parameters<Actions[Action]>) => ReturnType<Actions[Action]> & Type
 }
 
-type ActionsGenerator<T extends IActions, S, Actions extends IActions, AsyncActions extends IActions, ActionType> =
-  (entityName: string, options: TrivialReduxEndpointOptions<S, Actions, AsyncActions>) => ActionsWithType<T, ActionType>
+type ActionsGenerator<T extends IActions, S, Actions extends IActions, AsyncActions extends IActions, Partial> =
+  (entityName: string, options: TrivialReduxEndpointOptions<S, Actions, AsyncActions>) => ActionsWithPartial<T, Partial>
 
 export interface AsyncActionTypes  {
   load: string
@@ -15,19 +15,23 @@ export interface AsyncActionTypes  {
   failure: string
 }
 
-export interface SyncActionType {
+export interface SyncActionPartial {
   type: string
 }
 
-export interface AsyncActionType {
+export interface RequestPartial extends AsyncActionTypes {
+  isRequest: true
+}
+
+export interface AsyncActionPartial {
   types: AsyncActionTypes
 }
 
 type TrivialReduxReducer<Actions extends IActions, AsyncActions extends IActions, S, ReducerReturnValue> = (this: {
   types: {
-    [K in keyof ReturnType<ActionsGenerator<Actions, S, Actions, AsyncActions, SyncActionType>>]: string
+    [K in keyof ReturnType<ActionsGenerator<Actions, S, Actions, AsyncActions, SyncActionPartial>>]: string
   } & {
-    [K in keyof ReturnType<ActionsGenerator<AsyncActions, S, Actions, AsyncActions, AsyncActionType>>]: AsyncActionTypes
+    [K in keyof ReturnType<ActionsGenerator<AsyncActions, S, Actions, AsyncActions, AsyncActionPartial>>]: AsyncActionTypes
   }
   allTypes: any
 }, state: S, action: any) => ReducerReturnValue
@@ -41,7 +45,7 @@ export interface TrivialReduxCommonOptions {
   skipFormat?: boolean
   host?: string
   stateless?: boolean
-  extra: any
+  extra?: any
 }
 export type TrivialReduxEndpointOptions<S, Actions extends IActions, AsyncActions extends IActions> =  {
   initialState?: S
@@ -51,40 +55,48 @@ export type TrivialReduxEndpointOptions<S, Actions extends IActions, AsyncAction
 
 
 
-export interface TrivialReduxType<S, Actions extends IActions, AsyncActions extends IActions, AsyncActionsTypes> {
+export interface TrivialReduxType<S, Actions extends IActions, AsyncActions extends IActions, AsyncActionsTypes,  SyncActionType, AsyncActionType> {
   name: string
   initialState: S
-  actions: ActionsGenerator<Actions, S, Actions, AsyncActions, {}>
-  asyncActions: ActionsGenerator<AsyncActions, S, Actions, AsyncActions, {}>
+  actions: ActionsGenerator<Actions, S, Actions, AsyncActions, SyncActionType>
+  asyncActions: ActionsGenerator<AsyncActions, S, Actions, AsyncActions, AsyncActionType>
   reducer: (entityName: string, initialState: S) => OmitThisParameter<TrivialReduxExternalReducer<Actions, AsyncActions, S>>
   asyncActionsTypes?: AsyncActionsTypes
   options: TrivialReduxEndpointOptions<S, Actions, AsyncActions>
 }
 
+export type InternalTrivialReduxType<S, Actions extends IActions, AsyncActions extends IActions, AsyncActionsTypes> =
+  TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes, {}, {}>
+
+export type ExternalTrivialReduxType<S, Actions extends IActions, AsyncActions extends IActions, AsyncActionsTypes> =
+  TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes, SyncActionPartial, AsyncActionPartial>
+
+
+
 export type ApiForType<S, A extends IActions, AA extends IActions, AAT> = {
-  actions?: ReturnType<TrivialReduxType<S, A, AA, AAT>['actions']> & ReturnType<TrivialReduxType<S, A, AA, AAT>['asyncActions']>
-  requests: ReturnType<TrivialReduxType<S, A, AA, AAT>['asyncActions']>
-  reducer?: OmitThisParameter<ReturnType<TrivialReduxType<S, A, AA, AAT>['reducer']>>,
+  actions?: ReturnType<ExternalTrivialReduxType<S, A, AA, AAT>['actions']> & ReturnType<ExternalTrivialReduxType<S, A, AA, AAT>['asyncActions']>
+  requests: ReturnType<ExternalTrivialReduxType<S, A, AA, AAT>['asyncActions']>
+  reducer?: OmitThisParameter<ReturnType<ExternalTrivialReduxType<S, A, AA, AAT>['reducer']>>,
   types: {
-    [K in keyof ReturnType<TrivialReduxType<S, A, AA, AAT>['actions']>]: string
+    [K in keyof ReturnType<ExternalTrivialReduxType<S, A, AA, AAT>['actions']>]: string
   } & {
-    [K in keyof ReturnType<TrivialReduxType<S, A, AA, AAT>['asyncActions']>]: AsyncActionTypes
+    [K in keyof ReturnType<ExternalTrivialReduxType<S, A, AA, AAT>['asyncActions']>]: AsyncActionTypes
   }
-  asyncActionTypes?: TrivialReduxType<S, A, AA, AAT>['asyncActionsTypes'],
+  asyncActionTypes?: ExternalTrivialReduxType<S, A, AA, AAT>['asyncActionsTypes'],
 }
 
 export type SatelessApiForType<S, A extends IActions, AA extends IActions, AAT> = Omit<ApiForType<S, A, AA, AAT>, 'reducer' | 'actions'>
 
-interface TrivialReduxTypeDescriptor {
-  actions: (...args: any) => any
-  asyncActions: (...args: any) => any
-  reducer: (...args: any) => any
+type TrivialReduxTypeDescriptor = {
+  actions: (...args: any) => IActions
+  asyncActions:  (...args: any) => IActions
+  reducer: (...args: any) => IActions
   asyncActionsTypes: (...args: any) => any
 }
 
 type ApiForTypeAbstract<TrivialReduxType extends TrivialReduxTypeDescriptor> = {
-  actions: ReturnType<TrivialReduxType['actions']> & ReturnType<TrivialReduxType['asyncActions']>
-  requests: ReturnType<TrivialReduxType['asyncActions']>
+  actions: ActionsWithPartial<ReturnType<TrivialReduxType['actions']>, SyncActionPartial> & ActionsWithPartial<ReturnType<TrivialReduxType['asyncActions']>, AsyncActionPartial>
+  requests: ActionsWithPartial<ReturnType<TrivialReduxType['asyncActions']>, RequestPartial>
   reducer: OmitThisParameter<ReturnType<TrivialReduxType['reducer']>>,
   types: {
     [K in keyof ReturnType<TrivialReduxType['actions']>]: string

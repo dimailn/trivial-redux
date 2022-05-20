@@ -18,6 +18,7 @@ describe('Fetch actions', function() {
     action = (ref = api.requests.todos.execute({
       test: 1
     }), (ref1 = ref.meta, fetch = ref1.fetch), types = ref.types, ref);
+
     expect(types).toEqual(actionTypesFor('execute', 'todos'));
     expect(fetch.url).toBe('http://www.somesite.somedomain/todos.json');
     expect(fetch.params).toBeUndefined();

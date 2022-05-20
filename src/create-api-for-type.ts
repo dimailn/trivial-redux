@@ -1,4 +1,4 @@
-import { TrivialReduxType, ApiForType, AsyncActionTypes, TrivialReduxCommonOptions, TrivialReduxEndpointOptions, IActions, ActionsWithType, SyncActionType, AsyncActionType } from "./types"
+import { ExternalTrivialReduxType, ApiForType, AsyncActionTypes, TrivialReduxCommonOptions, TrivialReduxEndpointOptions, IActions, ActionsWithPartial, SyncActionPartial, AsyncActionPartial } from "./types"
 import createReducer from "./utils/create-reducer"
 import createRequestFromAction from "./create-request-from-action"
 import createActionTypes from "./utils/create-action-types"
@@ -9,15 +9,15 @@ import { cloneDeep } from "lodash"
 import applyExtra from './plugins/extra'
 
 
-const syncActionsWithType = <Actions extends IActions>(entityName: string, actions: ActionsWithType<Actions, {}>) : ActionsWithType<Actions, SyncActionType> => {
+const syncActionsWithType = <Actions extends IActions>(entityName: string, actions: ActionsWithPartial<Actions, {}>) : ActionsWithPartial<Actions, SyncActionPartial> => {
 
   return Object.fromEntries(
     Object.entries(actions).map(([name, action]) => [name, (...args) => ({type: actionTypeFor(name, entityName), ...action(...args)})])
-  ) as ActionsWithType<Actions, SyncActionType>
+  ) as ActionsWithPartial<Actions, SyncActionPartial>
 }
 
 
-const asyncActionsWithType = <Actions extends IActions>(entityName: string, actions: ActionsWithType<Actions, {}>) : ActionsWithType<Actions, AsyncActionType> => {
+const asyncActionsWithType = <Actions extends IActions>(entityName: string, actions: ActionsWithPartial<Actions, {}>) : ActionsWithPartial<Actions, AsyncActionPartial> => {
 
   return Object.fromEntries(
     Object.entries(actions).map(([name, action]) => {
@@ -37,19 +37,19 @@ const asyncActionsWithType = <Actions extends IActions>(entityName: string, acti
           }
 
         } else {
-          return { types: actionTypesFor(name, entityName), ... actionResult}
+          return { types: actionTypesFor(name, entityName), ...actionResult}
         }
 
       }]
 
     })
-  ) as ActionsWithType<Actions, AsyncActionType>
+  ) as ActionsWithPartial<Actions, AsyncActionPartial>
 }
 
 
 export default function<S, Actions extends IActions, AsyncActions extends IActions, AsyncActionsTypes>(
   entityName: string,
-  type: TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes>,
+  type: ExternalTrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes>,
   allTypes: any,
   settings: TrivialReduxCommonOptions
 ): ApiForType<S, Actions, AsyncActions, AsyncActionsTypes> {
@@ -72,7 +72,7 @@ export default function<S, Actions extends IActions, AsyncActions extends IActio
   } as ReturnType<typeof type.actions> & ReturnType<typeof type.asyncActions>
 
   const requests = Object.fromEntries(
-    Object.entries(type.asyncActions(entityName, options)).map(([actionName, action]) =>
+    Object.entries(asyncActions).map(([actionName, action]) =>
       [actionName, (...args) => createRequestFromAction(action(...args))]
     )
   ) as any as ReturnType<typeof type.asyncActions>
