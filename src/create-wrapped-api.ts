@@ -7,7 +7,7 @@ const dispatchify = (actions, dispatch) => {
         entityName,
         Object.fromEntries(
           Object.entries(actions).map(([actionName, action]) =>
-            [actionName, (...args) => dispatch(action)]
+            [actionName, (...args) => dispatch(action(...args))]
           )
         )
       ]

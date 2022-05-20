@@ -11,7 +11,7 @@ type TypeActions<S> = {
 }
 
 type TypeAsyncActions = {
-  fetch: (idOrData: number | object, data: object) => {
+  fetch: (idOrData?: number | object, data?: object) => {
     meta: {
       fetch: {
         url: string
