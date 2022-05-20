@@ -3,12 +3,13 @@
   "version": "1.13.1",
   "description": "",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "author": "",
   "repository": "https://github.com/dimailn/trivial-redux",
   "scripts": {
     "test": "jest",
     "cov": "jest --coverage",
-    "build": "coffee -o lib/ -c src/",
+    "build": "tsc ./src/index.ts --outDir lib/ -d",
     "pub": "npm run build && npm publish"
   },
   "license": "ISC",

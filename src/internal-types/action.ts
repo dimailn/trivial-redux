@@ -4,6 +4,7 @@ import actionTypesFor from '../action_types'
 import actionTypeFor from '../action_type'
 import defaultState from '../states/action'
 import createType from '../create-type'
+import {AxiosResponse} from 'axios'
 
 type TypeActions<S> = {
   reset: () => {}
@@ -22,7 +23,7 @@ type TypeAsyncActions = {
 }
 
 interface TypeAsyncActionsTypes<T> {
-  execute: () => T
+  execute: () => AxiosResponse<T>
 }
 
 interface TrivialReduxEndpointOptions<S> {

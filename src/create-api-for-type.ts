@@ -24,6 +24,7 @@ const asyncActionsWithType = <Actions extends IActions>(entityName: string, acti
 
 
       return [name, (...args) => {
+        // @ts-ignore
         const actionResult = action(...args)
 
         if(typeof actionResult === 'function'){
@@ -73,6 +74,7 @@ export default function<S, Actions extends IActions, AsyncActions extends IActio
 
   const requests = Object.fromEntries(
     Object.entries(asyncActions).map(([actionName, action]) =>
+      // @ts-ignore
       [actionName, (...args) => createRequestFromAction(action(...args))]
     )
   ) as any as ReturnType<typeof type.asyncActions>
