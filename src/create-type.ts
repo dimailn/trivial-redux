@@ -6,9 +6,16 @@ export default <T extends Function>(type: T, defaultState) : T => {
 
   const wrappedType : T = ((options = {}) => {
     // @ts-ignore
-    options.initialState ||= defaultState
+    const {initialState} = options
 
-    return type(options)
+    const initialStateIsObject = typeof initialState === 'object' && initialState !== null && !(initialState instanceof Array)
+
+    const currentInitialState = initialState === undefined ? defaultState : initialStateIsObject ? {...defaultState, ...initialState} : initialState
+
+    return {
+      ...type(options),
+      initialState: currentInitialState
+    }
   }) as any
 
   return wrappedType

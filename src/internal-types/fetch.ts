@@ -34,10 +34,8 @@ interface DefaultInitialState<D> {
 const type = <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
   options: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
 ) : InternalTrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
-  const {initialState} = options
   return {
     name: 'test',
-    initialState,
     options,
     actions(entityName, endpoint){
       return {
