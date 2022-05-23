@@ -68,6 +68,7 @@ interface TypeAsyncActionsTypes<T> {
   update: () => AxiosResponse<T>
   destroy: () => AxiosResponse<T>
   nextPage: () => AxiosResponse<Array<T>>
+  create: () => AxiosResponse<T>
 }
 
 interface DefaultInitialState<D> {
