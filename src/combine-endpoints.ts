@@ -18,7 +18,10 @@ export default <T>(endpoints: T, settings: TrivialReduxCommonOptions = {}) : Api
       api.reducers[name] = reducer
     }
     api.requests[name] = requests
-    api.actions[name] = actions
+
+    if(actions){
+      api.actions[name] = actions
+    }
     api.types[name] = types
 
   })
