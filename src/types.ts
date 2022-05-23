@@ -48,15 +48,11 @@ export interface TrivialReduxCommonOptions {
   extra?: any
 }
 export type TrivialReduxEndpointOptions<S, Actions extends IActions, AsyncActions extends IActions> =  {
-  initialState?: DeepPartial<S>
+  initialState?: S
   entry?: string
   reducer?: TrivialReduxInnerReducer<Actions, AsyncActions, S>
 } &  TrivialReduxCommonOptions
 
-
-type DeepPartial<T> = T extends object ? {
-  [P in keyof T]?: DeepPartial<T[P]>;
-} : T;
 
 export interface TrivialReduxType<S, Actions extends IActions, AsyncActions extends IActions, AsyncActionsTypes,  SyncActionType, AsyncActionType> {
   name: string
