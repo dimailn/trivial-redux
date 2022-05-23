@@ -1,4 +1,4 @@
-import rest, {restFactory} from './internal-types/rest'
+import rest from './internal-types/rest'
 import setter from './internal-types/setter'
 import fetch from './internal-types/fetch'
 import action from './internal-types/action'
@@ -17,8 +17,7 @@ export {
   rest,
   action,
   fetch,
-  setter,
-  restFactory
+  setter
 }
 
 

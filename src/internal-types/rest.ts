@@ -1,8 +1,6 @@
 import urlFormat from '../utils/url_format'
-import {TrivialReduxEndpointOptions, InternalTrivialReduxType, AsyncActionTypes} from '../types'
+import {TrivialReduxEndpointOptions, InternalTrivialReduxType} from '../types'
 import {AxiosResponse} from 'axios'
-import actionTypesFor from '../action_types'
-import actionTypeFor from '../action_type'
 import {rest as  defaultState} from '../states'
 import createType from '../create-type'
 type TypeActions<S> = {
@@ -97,9 +95,9 @@ const handleNextPage = function(state, action, types) {
   }
 };
 
-const type = <M extends {id: number | string}, PartialAsyncActionTypes = {}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
+const type = <M extends {id: number | string}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
   options: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
-) : InternalTrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M> & PartialAsyncActionTypes>=> {
+) : InternalTrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
   const {initialState} = options
 
   return {
@@ -258,7 +256,3 @@ const type = <M extends {id: number | string}, PartialAsyncActionTypes = {}, S e
 }
 
 export default createType(type, defaultState)
-
-export const restFactory = <PartialAsyncActionTypes>() => <M extends {id: number | string}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
-  options: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
-) : InternalTrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M> & PartialAsyncActionTypes> => type<M, PartialAsyncActionTypes, S>(options)
