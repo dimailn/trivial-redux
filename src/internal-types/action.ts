@@ -11,7 +11,7 @@ type TypeActions<S> = {
 }
 
 type TypeAsyncActions = {
-  execute: (data: object, options: object) => {
+  execute: (data?: object, options?: object) => {
     meta: {
       fetch: {
         url: string
