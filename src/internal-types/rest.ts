@@ -97,9 +97,9 @@ const handleNextPage = function(state, action, types) {
   }
 };
 
-const type = <M extends {id: number | string}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
+const type = <M extends {id: number | string}, PartialAsyncActionTypes = {}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
   options: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
-) : InternalTrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>>=> {
+) : InternalTrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M> & PartialAsyncActionTypes>=> {
   const {initialState} = options
 
   return {
@@ -258,3 +258,7 @@ const type = <M extends {id: number | string}, S extends DefaultInitialState<M> 
 }
 
 export default createType(type, defaultState)
+
+export const restFactory = <PartialAsyncActionTypes>() => <M extends {id: number | string}, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
+  options: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
+) : InternalTrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M> & PartialAsyncActionTypes> => type<M, PartialAsyncActionTypes, S>(options)
