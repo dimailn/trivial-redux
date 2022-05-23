@@ -64,8 +64,10 @@ export default function<S, Actions extends IActions, AsyncActions extends IActio
 
   const {stateless} = options
 
+  // @ts-ignore
   const syncActions = syncActionsWithType(entityName, type.actions(entityName, options))
 
+  // @ts-ignore
   const asyncActions = applyExtra(asyncActionsWithType(entityName, type.asyncActions(entityName, options)), options.extra)
 
   const actions = {
