@@ -71,7 +71,7 @@ export type InternalTrivialReduxType<S, Actions extends IActions, AsyncActions e
   TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes, {}, {}>
 
 export type ExternalTrivialReduxType<S, Actions extends IActions, AsyncActions extends IActions, AsyncActionsTypes> =
-  TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes, SyncActionPartial, AsyncActionPartial>
+  TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes, SyncActionPartial, AsyncActionPartial> & {initialState: S}
 
 
 
