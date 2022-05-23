@@ -124,7 +124,7 @@ export type Api<T extends Record<string, any>> = {
   }
 }
 
-type WrappedApi<T extends Record<string, any>> = {
+export type WrappedApi<T extends Record<string, any>> = {
   actions: {
     [K in keyof T['actions']]: {
       [A in keyof T['actions'][K]]:  T['asyncActionsTypes'][K][A] extends (...args: any[]) => any ? (...args: Parameters<T['actions'][K][A]>) => Promise<ReturnType<T['asyncActionsTypes'][K][A]>> :  (...args: Parameters<T['actions'][K][A]>) => void
