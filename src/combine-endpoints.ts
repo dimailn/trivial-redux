@@ -14,7 +14,9 @@ export default <T>(endpoints: T, settings: TrivialReduxCommonOptions = {}) : Api
   Object.entries(endpoints).forEach(([name, factory]) => {
     const {reducer, actions, requests, types} = createApiForType(name, factory, api.types, settings)
 
-    api.reducers[name] = reducer
+    if(reducer) {
+      api.reducers[name] = reducer
+    }
     api.requests[name] = requests
     api.actions[name] = actions
     api.types[name] = types
