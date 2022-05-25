@@ -62,16 +62,20 @@ export interface TrivialReduxType<S, Actions extends IActions, AsyncActions exte
   name: string
   actions: ActionsGenerator<Actions, S, Actions, AsyncActions, SyncActionType>
   asyncActions: ActionsGenerator<AsyncActions, S, Actions, AsyncActions, AsyncActionType>
-  reducer: (entityName: string, initialState: S) => OmitThisParameter<TrivialReduxExternalReducer<Actions, AsyncActions, S>>
   asyncActionsTypes?: AsyncActionsTypes
   options: TrivialReduxEndpointOptions<S, Actions, AsyncActions>
 }
 
 export type InternalTrivialReduxType<S, Actions extends IActions, AsyncActions extends IActions, AsyncActionsTypes> =
-  TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes, {}, {}>
+  TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes, {}, {}> & {
+    reducer: (entityName: string, initialState: S) => TrivialReduxExternalReducer<Actions, AsyncActions, S>
+  }
 
 export type ExternalTrivialReduxType<S, Actions extends IActions, AsyncActions extends IActions, AsyncActionsTypes> =
-  TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes, SyncActionPartial, AsyncActionPartial> & {initialState: S}
+  TrivialReduxType<S, Actions, AsyncActions, AsyncActionsTypes, SyncActionPartial, AsyncActionPartial> & {
+    initialState: S
+    reducer: (entityName: string, initialState: S) => OmitThisParameter<TrivialReduxExternalReducer<Actions, AsyncActions, S>>
+  }
 
 
 
