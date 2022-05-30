@@ -38,12 +38,12 @@ During store initialization pass the middleware and generated reducers
 
 ```javascript
 import {createStore, combineReducers, applyMiddleware} from 'redux'
-import trivialRedux from 'trivial-redux'
+import {combineEndpoints} from 'trivial-redux'
 import trivialReduxMiddleware from 'trivial-redux-middleware'
 import endpoints from './endpoints'
 import reducers from './modules'
 
-const api = trivialRedux(endpoints)
+const api = combineEndpoints(endpoints)
 const rootReducer = combineReducers({...reducers, ...api.reducers })
 const middlewares = [
   trivialReduxMiddleware
@@ -56,12 +56,12 @@ export default createStore(rootReducer, applyMiddleware(...middlewares))
 trivialRedux is the fabric for creating api object:
 
 ```javascript
-import trivialRedux from 'trivial-redux'
+import {combineEnpoints, rest} from 'trivial-redux'
 
 const api = trivialRedux(
   {
-    todos: 'http://some_site.com/todos',
-    comments: 'http://some_site.com/posts'
+    todos: rest({entry: 'http://some_site.com/todos'}),
+    comments: rest({entry: 'http://some_site.com/posts'})
   }
 )
 ```
@@ -83,11 +83,10 @@ For example, Trivial Redux contains some types of endpoints - rest, fetch and se
 All endpoints are considered as rest by default, but it can be changed:
 
 ```javascript
-trivialRedux(
-  todos: {
-    entry: '...',
-    type: 'fetch'
-  }
+combineEndpoints(
+  todos: fetch({
+    entry: '...'
+  })
 )
 ```
 
@@ -105,12 +104,12 @@ We recommend to keep complex endpoint in separate files:
 And aggregate them in main entry point
  ```javascript
  // api.js
- import trivialRedux from 'trivial-redux'
+ import {combineEndpoints} from 'trivial-redux'
  
  import todos from './endpoints/todos'
  import comments from './endpoints/comments'
  
- export default trivialRedux(
+ export default combineEndpoints(
   {
     todos,
     comments
@@ -123,8 +122,8 @@ You can define your own reducer in the configuration object. It will have access
 Note: *this* in reducer is immutable context for more convenient pass of useful data from trivial-redux to your reducer.
 You can't use it to save any your state.
 ```javascript
-trivialRedux(
-  todos: {
+combineEndpoints(
+  todos: rest({
     entry: '...',
     reducer: function(state, action){
       switch(action.type){
@@ -143,42 +142,10 @@ trivialRedux(
           return this.reducer(state, action)
       }
     }
-  }
+  })
 )
 ```
-## Decorators
 
-Sometimes you have common logic for the reducers(pagination, for example). In this case you can write this logic once in reducer decorator and use it wherever you need it. 
-
-```javascript
-
-// define your decorator
-const PaginationDecorator = function(reducer){
-  return function(state, action){
-    // here you have access to this.types, etc
-    switch(action.type){
-      case this.types.index:
-        return { ...reducer(state, action), ...awesomePagination }
-       default:
-        return reducer(state, action)
-    }
-  }
-}
-
-// if you use immer in decorator - PaginationDecorator.immer = true
-
-// and use it in endpoint config
-
-trivialRedux(
-  {
-    todos: {
-        entry: '~todos',
-        decorators: [PaginationDecorator]
-    }
-  }
-)
-
-```
 
 ## The endpoint state structure
 ### REST
@@ -288,9 +255,11 @@ Besides the built-in types you may use your own types. Define you type like belo
 
 ```javascript
 
-export default {
+const type = <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
+  options: TrivialReduxEndpointOptions<S, TypeActions<S>, TypeAsyncActions> = {}
+) : InternalTrivialReduxType<S, TypeActions<S>, TypeAsyncActions, TypeAsyncActionsTypes<M>> => {
   name: 'custom-setter',
-  initialState: null,
+  options,
   // all reducers of types works on immer
   // It means you should mutate state here or return new state(not both)
   reducer(entityName, initialState) {
@@ -330,7 +299,9 @@ export default {
   }
 }
 
+export default createType(type, null)
 ```
+
 
 Action types will be generated based on action name and type(sync/async). You may also specify your type explicit.
 
@@ -338,15 +309,9 @@ After you may use your type in schema as following:
 
 ```javascript
 
-export default trivialRedux(
+export default combineEndpoints(
   {
-    todo:
-      type: 'custom-setter'
-  },
-  {
-    types: [
-      CustomSetter
-    ]
+    todo: customSetter()
   }
 )
 
