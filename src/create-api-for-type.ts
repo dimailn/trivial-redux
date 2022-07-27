@@ -11,6 +11,7 @@ import applyExtra from './plugins/extra'
 const syncActionsWithType = <Actions extends IActions>(entityName: string, actions: ActionsWithPartial<Actions, {}>) : ActionsWithPartial<Actions, SyncActionPartial> => {
 
   return Object.fromEntries(
+    // @ts-ignore
     Object.entries(actions).map(([name, action]) => [name, (...args) => ({type: actionTypeFor(name, entityName), ...action(...args)})])
   ) as ActionsWithPartial<Actions, SyncActionPartial>
 }

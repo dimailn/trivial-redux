@@ -109,6 +109,7 @@ const type = <M extends {id: number | string}, S extends DefaultInitialState<M> 
       }
     },
     reducer(entityName, initialState){
+      // @ts-ignore
       return function (state, action) {
         if (state == null) {
           state = initialState;

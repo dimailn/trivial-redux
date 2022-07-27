@@ -46,6 +46,7 @@ const type = <M, S extends DefaultInitialState<M> = DefaultInitialState<M>>(
       }
     },
     reducer(entityName, initialState){
+      // @ts-ignore
       return function (state, action) {
         if (state == null) {
           state = initialState;
