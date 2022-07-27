@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest",
     "cov": "jest --coverage",
-    "build": "tsc ./src/index.ts --outDir lib/ -d",
+    "build": "tsc -p tsconfig.json",
     "pub": "npm run build && npm publish"
   },
   "license": "ISC",
