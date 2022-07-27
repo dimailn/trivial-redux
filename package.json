@@ -1,36 +1,56 @@
 {
   "name": "trivial-redux",
-  "version": "1.13.1",
+  "version": "2.0.0-alpha.11",
   "description": "",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "author": "",
   "repository": "https://github.com/dimailn/trivial-redux",
   "scripts": {
     "test": "jest",
     "cov": "jest --coverage",
-    "build": "coffee -o lib/ -c src/",
+    "build": "tsc ./src/index.ts --outDir lib/ -d",
     "pub": "npm run build && npm publish"
   },
   "license": "ISC",
   "devDependencies": {
-    "babel-jest": "^21.0.2",
+    "axios": "^0.27.2",
+    "babel-jest": "^28.1.0",
     "coffee-script": "^1.12.6",
     "coveralls": "^3.0.2",
-    "jest": "^21.2.1"
+    "jest": "^28.1.0",
+    "lodash.clonedeep": "^4.5.0",
+    "ts-jest": "^28.0.2"
   },
   "jest": {
+    "globals": {
+      "ts-jest": {
+        "exclude": [
+          "**/__mocks__/*"
+        ],
+        "diagnostics": {
+          "exclude": [
+            "**/*.ts",
+            "**/*.test.ts"
+          ]
+        },
+        "tsconfig": {
+          "isolatedModules": true
+        }
+      }
+    },
     "moduleFileExtensions": [
       "js",
-      "coffee"
+      "coffee",
+      "ts",
+      "js"
     ],
     "transform": {
-      ".*": "./__tests__/preprocessor.js"
+      "^.+\\.ts$": "ts-jest",
+      "^.+\\.js$": "babel-jest"
     },
     "testMatch": [
-      "**/__tests__/**/*.js(x)",
-      "**/__tests__/**/*.coffee",
-      "*/?(*.)(spec|test).js(x)",
-      "*/?(*.)(spec|test).coffee"
+      "**/__tests__/**/*.test.js"
     ]
   },
   "dependencies": {
