@@ -5,9 +5,8 @@ import createActionTypes from "./utils/create-action-types"
 import defaultOptions from "./default-options"
 import actionTypeFor from "./action_type"
 import actionTypesFor from "./action_types"
-import { cloneDeep } from "lodash"
+import cloneDeep from "lodash.clonedeep"
 import applyExtra from './plugins/extra'
-
 
 const syncActionsWithType = <Actions extends IActions>(entityName: string, actions: ActionsWithPartial<Actions, {}>) : ActionsWithPartial<Actions, SyncActionPartial> => {
 

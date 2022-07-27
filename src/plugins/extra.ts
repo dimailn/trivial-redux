@@ -1,7 +1,8 @@
 var _, applyExtra,
   slice = [].slice;
 
-_ = require('lodash');
+const cloneDeep = require('lodash.clonedeep')
+const merge = require('lodash.merge')
 
 export default function(actions, extra) {
   var actionCreator, actionName, actionsWithExtra, fn;
@@ -15,12 +16,12 @@ export default function(actions, extra) {
         return function(dispatch, getState, extraArgument) {
           var dispatchWrapper;
           dispatchWrapper = function(a) {
-            return dispatch(_.merge(_.cloneDeep(a), extra));
+            return dispatch(merge(cloneDeep(a), extra));
           };
           return action(dispatchWrapper, getState, extraArgument);
         };
       } else {
-        return _.merge(_.cloneDeep(action), extra);
+        return merge(cloneDeep(action), extra);
       }
     };
   };

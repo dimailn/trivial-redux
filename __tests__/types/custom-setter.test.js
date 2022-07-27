@@ -9,7 +9,7 @@ const {default: setterDefaultState} = require('../../src/states/setter')
 
 const {combineEndpoints, rest, createType} = require( '../../src/index')
 
-cloneDeep = require('lodash').cloneDeep;
+cloneDeep = require('lodash.clonedeep');
 
 
 customSetter = createType(({initialState}) => ({
